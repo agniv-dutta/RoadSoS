@@ -1,0 +1,144 @@
+{
+  "version": "1.0.0",
+  "protocol": "IAED — International Academies of Emergency Dispatch",
+  "description": "Rule-based triage assignment for RoadSoS PS #9. Rules are evaluated in priority order. First matching rule wins.",
+  "triage_levels": {
+    "P1": {
+      "cap_severity": "Extreme",
+      "cap_urgency": "Immediate",
+      "label": "Critical",
+      "response_target_seconds": 300,
+      "description": "Immediate life threat. Dispatch trauma centre, fire brigade, and ambulance simultaneously."
+    },
+    "P2": {
+      "cap_severity": "Severe",
+      "cap_urgency": "Expected",
+      "label": "Serious",
+      "response_target_seconds": 600,
+      "description": "Urgent but patient is currently stable. Dispatch ambulance and police."
+    },
+    "P3": {
+      "cap_severity": "Minor",
+      "cap_urgency": "Future",
+      "label": "Minor",
+      "response_target_seconds": 1800,
+      "description": "Non-urgent. Dispatch towing or general assistance. No ambulance required."
+    }
+  },
+  "rules": [
+    {
+      "id": "R01",
+      "priority": 1,
+      "level": "P1",
+      "condition": "entrapment == true AND hazard_type IN [fire, fuel_leak]",
+      "rationale": "Trapped person with active fire or fuel spill — highest IAED priority, mass casualty risk."
+    },
+    {
+      "id": "R02",
+      "priority": 2,
+      "level": "P1",
+      "condition": "entrapment == true",
+      "rationale": "Any entrapment is life-threatening without fire confirmation."
+    },
+    {
+      "id": "R03",
+      "priority": 3,
+      "level": "P1",
+      "condition": "hazard_type IN [fire, fuel_leak]",
+      "rationale": "Active fire or fuel leak without entrapment still poses mass-casualty risk."
+    },
+    {
+      "id": "R04",
+      "priority": 4,
+      "level": "P1",
+      "condition": "child_involved == true AND intent IN [emergency_crash, medical_emergency]",
+      "rationale": "Children in crash or medical emergency receive immediate priority per IAED paediatric protocol."
+    },
+    {
+      "id": "R05",
+      "priority": 5,
+      "level": "P1",
+      "condition": "casualties >= 3",
+      "rationale": "Three or more casualties indicates potential mass casualty incident."
+    },
+    {
+      "id": "R06",
+      "priority": 6,
+      "level": "P1",
+      "condition": "intent == medical_emergency AND casualties == null",
+      "rationale": "Unknown casualty count in medical emergency — treat as critical until confirmed otherwise."
+    },
+    {
+      "id": "R07",
+      "priority": 7,
+      "level": "P2",
+      "condition": "casualties IN [1, 2]",
+      "rationale": "Small confirmed casualty count — serious but manageable."
+    },
+    {
+      "id": "R08",
+      "priority": 8,
+      "level": "P2",
+      "condition": "intent IN [emergency_crash, medical_emergency]",
+      "rationale": "Crash or medical emergency with no other slots resolved — default to serious."
+    },
+    {
+      "id": "R09",
+      "priority": 9,
+      "level": "P3",
+      "condition": "casualties == 0 AND entrapment == false",
+      "rationale": "No injuries or entrapment — property damage only."
+    },
+    {
+      "id": "R10",
+      "priority": 10,
+      "level": "P3",
+      "condition": "intent == vehicle_assistance",
+      "rationale": "Breakdown or towing request — non-medical, non-injury."
+    },
+    {
+      "id": "R11",
+      "priority": 11,
+      "level": "P2",
+      "condition": "default",
+      "rationale": "Default fallback — treat as serious if no other rule matches."
+    }
+  ],
+  "slot_definitions": {
+    "casualties": {
+      "type": "integer",
+      "nullable": true,
+      "description": "Number of people injured or affected. Null means unknown.",
+      "extraction": "regex + word-number lookup across EN/BN/HI"
+    },
+    "entrapment": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if any person is physically trapped inside a vehicle or wreckage.",
+      "extraction": "keyword regex (phanse, atke, stuck, trapped, door jammed)"
+    },
+    "hazard_type": {
+      "type": "enum",
+      "values": [
+        "fire",
+        "fuel_leak",
+        "none",
+        "unknown"
+      ],
+      "description": "Type of environmental hazard at the scene.",
+      "extraction": "keyword regex — fire keywords checked first, then fuel keywords"
+    },
+    "child_involved": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if a child, infant, or school vehicle is mentioned.",
+      "extraction": "keyword regex (bachha, shishu, child, school bus)"
+    },
+    "location_mention": {
+      "type": "string",
+      "nullable": true,
+      "description": "Raw text reference to a location or landmark. Not geocoded in baseline.",
+      "extraction": "regex (near X, highway N, NH-X, bridge, junction)"
+    }
+  }
+}

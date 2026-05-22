@@ -1,11 +1,29 @@
-fastapi>=0.115
-uvicorn[standard]>=0.30
-sqlalchemy[asyncio]>=2.0
-aiofiles>=24.1
-aiosqlite>=0.20
-aiomysql>=0.2
-pydantic>=2.7
-pydantic-settings>=2.3
-httpx>=0.27
-python-dotenv>=1.0
-alembic>=1.13
+# RoadSoS PS #9 — requirements
+
+# API
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+pydantic==2.7.1
+python-multipart==0.0.9
+
+# NLU — zero-shot baseline 
+transformers==4.41.2
+torch==2.3.0
+# For fine-tuning upgrade: install additionally:
+# datasets==2.19.1
+# seqeval==1.2.2
+# sklearn-crfsuite==0.3.6
+
+# Regex + text utilities
+spacy==3.7.4
+
+# Database (existing scaffold)
+sqlalchemy==2.0.30
+alembic==1.13.1
+aiosqlite==0.20.0
+
+# Environment
+python-dotenv==1.0.1
+
+# Settings management (required by app/config.py)
+pydantic-settings==2.2.1

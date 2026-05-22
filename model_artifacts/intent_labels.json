@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "model": "facebook/bart-large-mnli",
+  "approach": "zero-shot-classification",
+  "description": "Intent taxonomy for RoadSoS PS #9 multilingual emergency triage. Labels map raw panic messages to structured emergency intents using BART zero-shot inference. No fine-tuning required for the baseline; XLM-RoBERTa fine-tuning is the upgrade path.",
+  "candidate_labels": [
+    "road accident or vehicle crash",
+    "fire or fuel explosion hazard",
+    "medical emergency or injury",
+    "vehicle breakdown or towing assistance",
+    "general help request"
+  ],
+  "intent_map": {
+    "road accident or vehicle crash": "emergency_crash",
+    "fire or fuel explosion hazard": "fire_hazard",
+    "medical emergency or injury": "medical_emergency",
+    "vehicle breakdown or towing assistance": "vehicle_assistance",
+    "general help request": "general_help"
+  },
+  "intent_descriptions": {
+    "emergency_crash": "A road traffic collision involving one or more vehicles. May include injuries, entrapment, or hazardous materials.",
+    "fire_hazard": "Active fire, smoke, or fuel leak associated with a vehicle or roadside incident.",
+    "medical_emergency": "Medical crisis on or near a road — cardiac event, seizure, trauma injuries — requiring emergency medical services.",
+    "vehicle_assistance": "Non-injury incident requiring roadside help: flat tyre, dead battery, breakdown, towing.",
+    "general_help": "Unspecified distress call that does not map cleanly to the above categories.",
+    "unknown": "Fallback intent when classifier confidence is below threshold or message is unintelligible."
+  },
+  "confidence_threshold": 0.35,
+  "languages_supported": [
+    "en",
+    "bn",
+    "hi",
+    "mixed_en_bn",
+    "mixed_en_hi"
+  ],
+  "upgrade_path": {
+    "model": "xlm-roberta-base",
+    "training_data": "app/nlu/dataset/panic_data.json",
+    "framework": "HuggingFace Trainer + seqeval",
+    "notes": "Fine-tune on panic_data.json with at least 200 labeled examples. Add Sinhala and Thai transliterations (10-15 examples each) before final evaluation."
+  }
+}

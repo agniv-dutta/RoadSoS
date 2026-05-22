@@ -1,0 +1,65 @@
+"""
+RoadSoS — FastAPI entry point.
+Registers all routers. Run with: uvicorn app.main:app --reload
+"""
+
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.routers.triage  import router as triage_router
+from app.routers.nearby  import router as nearby_router
+from app.routers.sos     import router as sos_router
+from app.routers.health  import router as health_router
+from app.routers.admin   import router as admin_router
+from app.config import get_settings
+
+settings = get_settings()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Pre-warm NLU classifier on startup so first request isn't slow
+    from app.nlu.pipeline import load_classifier
+    load_classifier()
+    yield
+
+
+app = FastAPI(
+    title="RoadSoS — Emergency NLU API",
+    description=(
+        "PS #9: Multilingual Emergency Intent Parsing & Triage Slot Filling (CAP v1.2)\n\n"
+        "Core endpoint: `POST /api/triage` — accepts raw panic text, returns structured CAP v1.2 incident report.\n"
+        "Support endpoints: `/nearby`, `/sos`, `/health`, `/admin/sync`."
+    ),
+    version=settings.version,
+    lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(triage_router)
+app.include_router(nearby_router)
+app.include_router(sos_router)
+app.include_router(health_router)
+app.include_router(admin_router)
+
+
+@app.get("/")
+async def root():
+    return {
+        "service": "RoadSoS NLU",
+        "ps": "Problem #9 — Multilingual Emergency Triage",
+        "docs": "/docs",
+        "endpoints": {
+            "triage":  "POST /api/triage",
+            "nearby":  "GET  /nearby",
+            "sos":     "POST /sos",
+            "health":  "GET  /health",
+        },
+    }

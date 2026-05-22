@@ -1,0 +1,1122 @@
+[
+  {
+    "id": 1,
+    "text": "accident happened 3 people stuck inside car please help",
+    "language": "en",
+    "slots": {
+      "casualties": 3,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 2,
+    "text": "big accident on highway truck fell 2 people bleeding badly",
+    "language": "en",
+    "slots": {
+      "casualties": 2,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "highway"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 3,
+    "text": "help help car crash fire starting petrol leaking 4 people inside",
+    "language": "en",
+    "slots": {
+      "casualties": 4,
+      "entrapment": true,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 4,
+    "text": "accident near bridge child hurt not moving please send ambulance",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": true,
+      "location_mention": "bridge"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 5,
+    "text": "truck collided with bus highway 10 people injured some unconscious",
+    "language": "en",
+    "slots": {
+      "casualties": 10,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "highway"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 6,
+    "text": "car accident road 1 person minor injury nothing serious",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "road"
+    },
+    "triage_level": "P3",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 7,
+    "text": "motorbike fell rider hurt leg broken needs hospital",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P2",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 8,
+    "text": "fire in vehicle on AH1 road driver trapped smoke everywhere",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": true,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": "AH1"
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 9,
+    "text": "vehicle on fire near school children inside please come fast",
+    "language": "en",
+    "slots": {
+      "casualties": null,
+      "entrapment": true,
+      "hazard_type": "fire",
+      "child_involved": true,
+      "location_mention": "school"
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 10,
+    "text": "petrol tanker accident spill on road near market fire risk",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": "market"
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 11,
+    "text": "man collapsed on road not breathing need help now",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "road"
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 12,
+    "text": "accident victim bleeding from head unconscious please hurry",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 13,
+    "text": "crash happened need to know nearest hospital location",
+    "language": "en",
+    "slots": {
+      "casualties": null,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P2",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 14,
+    "text": "accident suna help koro 2 jon ache gari te atokata",
+    "language": "bn",
+    "slots": {
+      "casualties": 2,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 15,
+    "text": "ekta boro accident hoyeche highway te 5 jon injured please ambulance pathao",
+    "language": "bn",
+    "slots": {
+      "casualties": 5,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "highway"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 16,
+    "text": "gari te agun lagche driver atke geche please help koro",
+    "language": "bn",
+    "slots": {
+      "casualties": 1,
+      "entrapment": true,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 17,
+    "text": "bachcha road e porte geche gari chapa diyeche ekhuni help chai",
+    "language": "bn",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": true,
+      "location_mention": "road"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 18,
+    "text": "truck palte geche dhaka sylhet highway te 3 jon blood berochhe",
+    "language": "bn",
+    "slots": {
+      "casualties": 3,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "dhaka sylhet highway"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 19,
+    "text": "accident hoyeche ekjon chot peyeche hospital lagbe",
+    "language": "bn",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P2",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 20,
+    "text": "petrol sorbochhe gari theke agun lagbe please jaldi ashun",
+    "language": "bn",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 21,
+    "text": "accident hua 3 log phanse hain petrol leak jaldi aao",
+    "language": "mixed",
+    "slots": {
+      "casualties": 3,
+      "entrapment": true,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 22,
+    "text": "bhaiya crash ho gaya highway pe 2 log bleeding badly help karo",
+    "language": "mixed",
+    "slots": {
+      "casualties": 2,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "highway"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 23,
+    "text": "crash hoise road e 4 jon atokte geche please ambulance dao",
+    "language": "mixed",
+    "slots": {
+      "casualties": 4,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "road"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 24,
+    "text": "agun dhore geche garite ekjon driver inside help help",
+    "language": "mixed",
+    "slots": {
+      "casualties": 1,
+      "entrapment": true,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 25,
+    "text": "accident hoye geche bhai 1 ta baccha hurt please hospital kothay",
+    "language": "mixed",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": true,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 26,
+    "text": "road e garir sathe garir dhakka laglo 2 joner chot petrol porte ache",
+    "language": "mixed",
+    "slots": {
+      "casualties": 2,
+      "entrapment": false,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": "road"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 27,
+    "text": "HELP ACCIDENT 5 PEOPLE BLEEDING FIRE STARTING HIGHWAY PLEASE",
+    "language": "en",
+    "slots": {
+      "casualties": 5,
+      "entrapment": false,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": "highway"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 28,
+    "text": "plz hlp accidnt hapnd 2 ppl stck nd blding badly",
+    "language": "en",
+    "slots": {
+      "casualties": 2,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 29,
+    "text": "accidnt!! fire!!!! ppl inside!!! near checkpoint come NOW",
+    "language": "en",
+    "slots": {
+      "casualties": null,
+      "entrapment": true,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": "checkpoint"
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 30,
+    "text": "crash..bad one..3 hurt..one not moving..near junction 4",
+    "language": "en",
+    "slots": {
+      "casualties": 3,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "junction 4"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 31,
+    "text": "pls help accident hppnd near toll 2 ppl stuck petrol lkg",
+    "language": "mixed",
+    "slots": {
+      "casualties": 2,
+      "entrapment": true,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": "toll"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 32,
+    "text": "hlp!! gari ultey geche 3 jon blood berochhe jldi aao",
+    "language": "mixed",
+    "slots": {
+      "casualties": 3,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 33,
+    "text": "my car hit a divider i am fine just need towing",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P3",
+    "intent": "vehicle_assistance"
+  },
+  {
+    "id": 34,
+    "text": "small accident scratched bumper no injuries just need help",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P3",
+    "intent": "vehicle_assistance"
+  },
+  {
+    "id": 35,
+    "text": "tyre burst on highway car stopped need roadside assistance",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "highway"
+    },
+    "triage_level": "P3",
+    "intent": "vehicle_assistance"
+  },
+  {
+    "id": 36,
+    "text": "two vehicles collided head on near flyover multiple people down",
+    "language": "en",
+    "slots": {
+      "casualties": null,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "flyover"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 37,
+    "text": "bus fell into ditch near mountain road passengers trapped inside",
+    "language": "en",
+    "slots": {
+      "casualties": null,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "mountain road"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 38,
+    "text": "ambulance needed immediately man hit by truck bleeding on road",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "road"
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 39,
+    "text": "pedestrian knocked down by car near school not responsive child",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": true,
+      "location_mention": "school"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 40,
+    "text": "gas cylinder in truck exploded highway near km marker 42",
+    "language": "en",
+    "slots": {
+      "casualties": null,
+      "entrapment": false,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": "highway km 42"
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 41,
+    "text": "2 ta garir accident hoise poth e keu nore na please help",
+    "language": "bn",
+    "slots": {
+      "casualties": null,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "poth"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 42,
+    "text": "gari palte geche keu ber hoite parteche na agun o dhorse",
+    "language": "bn",
+    "slots": {
+      "casualties": null,
+      "entrapment": true,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 43,
+    "text": "boro accident dhaka chittagong highway 6 jon ghayel ache",
+    "language": "bn",
+    "slots": {
+      "casualties": 6,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "dhaka chittagong highway"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 44,
+    "text": "motorbike accident rider matha theke blood berochhe hospital lagbe",
+    "language": "bn",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 45,
+    "text": "bachha school bus e atokte geche bus palte geche please help",
+    "language": "bn",
+    "slots": {
+      "casualties": null,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": true,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 46,
+    "text": "car crash near temple 3 people hurt one very bad blood everywhere",
+    "language": "en",
+    "slots": {
+      "casualties": 3,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "temple"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 47,
+    "text": "truck overturned spilling fuel please evacuate area fire danger",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 48,
+    "text": "multiple car pileup monsoon road 7 people injured highway closed",
+    "language": "en",
+    "slots": {
+      "casualties": 7,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "highway"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 49,
+    "text": "someone fell from bike not serious but need first aid nearby",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P2",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 50,
+    "text": "accident happened looks minor both drivers okay just shaken",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P3",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 51,
+    "text": "crash scene 2 injured one serious one walking near toll plaza",
+    "language": "en",
+    "slots": {
+      "casualties": 2,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "toll plaza"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 52,
+    "text": "woman in labor after car crash need hospital urgent",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 53,
+    "text": "truck hit 3 motorcycles 5 people down fire starting from engine",
+    "language": "en",
+    "slots": {
+      "casualties": 5,
+      "entrapment": false,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 54,
+    "text": "gari te agun lagche petrol porte ache 2 jon andar atokte geche help",
+    "language": "bn",
+    "slots": {
+      "casualties": 2,
+      "entrapment": true,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 55,
+    "text": "rickshaw auto accident e 1 jon head injury hospital kothay ache",
+    "language": "bn",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P2",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 56,
+    "text": "bridge er upore accident hoise bus er 8 jon injured please aashun",
+    "language": "bn",
+    "slots": {
+      "casualties": 8,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "bridge"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 57,
+    "text": "ACCIDENT HOISE 2 LOG PHANSE FIRE LAGCHE JALDI",
+    "language": "mixed",
+    "slots": {
+      "casualties": 2,
+      "entrapment": true,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 58,
+    "text": "bhaiya bhaiya gaadi crash ho gayi 3 bache phanse hai jaldi aao",
+    "language": "mixed",
+    "slots": {
+      "casualties": 3,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": true,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 59,
+    "text": "help help accident hoyce 4 jon blood beroche petrol o pore",
+    "language": "mixed",
+    "slots": {
+      "casualties": 4,
+      "entrapment": false,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 60,
+    "text": "bad crash near dhaka airport 6 people injured ambulance needed fast",
+    "language": "en",
+    "slots": {
+      "casualties": 6,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "dhaka airport"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 61,
+    "text": "car rolled over in flood road 2 people missing",
+    "language": "en",
+    "slots": {
+      "casualties": 2,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "flood road"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 62,
+    "text": "vehicle fire near gas station very dangerous explosion risk",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": "gas station"
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 63,
+    "text": "elderly man hit by car on road not moving please urgent",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "road"
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 64,
+    "text": "minor scratch on car no injuries just exchanging insurance info",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P3",
+    "intent": "vehicle_assistance"
+  },
+  {
+    "id": 65,
+    "text": "crash just happened driver conscious but leg badly hurt",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P2",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 66,
+    "text": "multiple people hurt near roundabout some trapped in vehicles",
+    "language": "en",
+    "slots": {
+      "casualties": null,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "roundabout"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 67,
+    "text": "car in river after bridge accident 2 people inside please help",
+    "language": "en",
+    "slots": {
+      "casualties": 2,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "river bridge"
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 68,
+    "text": "bike fell on slippery road rider hurt wrist can walk but pain",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "road"
+    },
+    "triage_level": "P3",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 69,
+    "text": "school van accident 6 children inside all screaming please hurry",
+    "language": "en",
+    "slots": {
+      "casualties": 6,
+      "entrapment": true,
+      "hazard_type": "none",
+      "child_involved": true,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 70,
+    "text": "ekta bus paltey geche 10 12 jon injured help dorkr ekhuni",
+    "language": "bn",
+    "slots": {
+      "casualties": 10,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 71,
+    "text": "head on crash 4 injured 2 very serious blood not stopping",
+    "language": "en",
+    "slots": {
+      "casualties": 4,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 72,
+    "text": "motorbike hit divider rider helmet cracked not waking up please",
+    "language": "en",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 73,
+    "text": "accident dheke jawa hoye geche police lagbe abr ambulance o",
+    "language": "bn",
+    "slots": {
+      "casualties": null,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P2",
+    "intent": "emergency_crash"
+  },
+  {
+    "id": 74,
+    "text": "gaadi toh thoda sa hua hai sab theek hai bas police chahiye",
+    "language": "mixed",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P3",
+    "intent": "vehicle_assistance"
+  },
+  {
+    "id": 75,
+    "text": "3 injured in crash near market one not breathing do something fast",
+    "language": "en",
+    "slots": {
+      "casualties": 3,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": "market"
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 76,
+    "text": "accident er pore ekjon unconscious hoya geche blood berochhe",
+    "language": "bn",
+    "slots": {
+      "casualties": 1,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "medical_emergency"
+  },
+  {
+    "id": 77,
+    "text": "truck petrol tanker overturn road closed fuel all over please",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "fuel_leak",
+      "child_involved": false,
+      "location_mention": "road"
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 78,
+    "text": "minor bike scratch no blood no injury just need police report",
+    "language": "en",
+    "slots": {
+      "casualties": 0,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P3",
+    "intent": "vehicle_assistance"
+  },
+  {
+    "id": 79,
+    "text": "help 2 log trapped fire smoke andar jaldi",
+    "language": "mixed",
+    "slots": {
+      "casualties": 2,
+      "entrapment": true,
+      "hazard_type": "fire",
+      "child_involved": false,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "fire_hazard"
+  },
+  {
+    "id": 80,
+    "text": "accident hoye geche 5 jon ache tader modhye 2 ta bachcha",
+    "language": "bn",
+    "slots": {
+      "casualties": 5,
+      "entrapment": false,
+      "hazard_type": "none",
+      "child_involved": true,
+      "location_mention": null
+    },
+    "triage_level": "P1",
+    "intent": "emergency_crash"
+  }
+]

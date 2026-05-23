@@ -1,0 +1,28 @@
+{
+  "CASUALTY_COUNT": [
+    "number",
+    "count",
+    "slot_number"
+  ],
+  "LOCATION": [
+    "location",
+    "city",
+    "address",
+    "area"
+  ],
+  "HAZARD_TYPE": [
+    "hazard",
+    "danger",
+    "object"
+  ],
+  "ENTRAPMENT": [
+    "state",
+    "condition",
+    "status"
+  ],
+  "CHILD_INVOLVED": [
+    "person_type",
+    "age_group",
+    "child"
+  ]
+}

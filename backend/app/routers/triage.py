@@ -13,6 +13,8 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app.nlu.pipeline import run_nlu_pipeline
+from app.nlu.cap_exporter import CAPv12Exporter
+from app.dialogue.state_machine import TriageStateMachine
 from app.nlu.slots import (
     TRIAGE_TO_CAP_SEVERITY,
     TRIAGE_TO_CAP_URGENCY,
@@ -63,6 +65,12 @@ class TriageResponse(BaseModel):
     follow_up:        str | None
     missing_slots:    list[str]
     info:             CAPInfo
+    cap_alert:        dict | None = None
+    cap_validation_errors: list[str] | None = None
+    session_id:        str | None = None
+    turn:              int | None = None
+    follow_up_question: str | None = None
+    session_state:     str | None = None
 
 
 # ─── Helper ────────────────────────────────────────────────────────────────────
@@ -81,7 +89,7 @@ def _build_cap_response(message: str, nlu: dict) -> TriageResponse:
     triage_level = TriageLevel(nlu["triage_level"])
     intent       = nlu["intent"]
 
-    return TriageResponse(
+    resp = TriageResponse(
         identifier    = str(uuid.uuid4()),
         sender        = "roadsos-nlu-v1",
         sent          = datetime.now(timezone.utc).isoformat(),
@@ -104,6 +112,30 @@ def _build_cap_response(message: str, nlu: dict) -> TriageResponse:
         ),
     )
 
+    # Build and validate CAP v1.2 JSON
+    exporter = CAPv12Exporter()
+    try:
+        cap_alert = exporter.build_alert({
+            "intent": nlu.get("intent"),
+            "triage": nlu.get("triage_level") or nlu.get("triage"),
+            "confidence": nlu.get("confidence"),
+            "slots": nlu.get("slots"),
+            "language": nlu.get("language"),
+            "raw_text": nlu.get("raw_text") or message,
+        }, sender=resp.sender, source_message=message)
+        valid, errors = exporter.validate_cap(cap_alert)
+        if valid:
+            resp.cap_alert = cap_alert
+            resp.cap_validation_errors = None
+        else:
+            resp.cap_alert = None
+            resp.cap_validation_errors = errors
+    except Exception as e:
+        resp.cap_alert = None
+        resp.cap_validation_errors = [str(e)]
+
+    return resp
+
 
 # ─── Endpoints ─────────────────────────────────────────────────────────────────
 
@@ -123,7 +155,25 @@ async def triage_message(req: TriageRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"NLU pipeline error: {str(e)}")
 
-    return _build_cap_response(req.message, nlu_result)
+    # Backwards-compatible single-turn endpoint: route through state machine with a generated session
+    from app.dialogue.session_store import SessionStore
+    from app.dialogue.state_machine import TriageStateMachine
+    # use internal ephemeral session
+    session_id = str(uuid.uuid4())
+    store = SessionStore()
+    sm = TriageStateMachine(store)
+    result = sm.process_turn(session_id=session_id, message=req.message, language_hint=None)
+    # Build triage response from NLU and attach session info
+    triage_resp = _build_cap_response(req.message, nlu_result)
+    triage_resp.cap_alert = result.get("cap_alert")
+    triage_resp.cap_validation_errors = result.get("cap_validation_errors")
+    # expose session id and turn info in headers? for backward compat we include in body
+    out = triage_resp.model_dump()
+    out["session_id"] = result.get("session_id")
+    out["turn"] = 1
+    out["follow_up_question"] = result.get("follow_up_question")
+    out["session_state"] = result.get("state")
+    return out
 
 
 @router.get("/triage/health", summary="NLU pipeline health check")
@@ -154,3 +204,30 @@ async def triage_batch(messages: list[str]):
         except Exception as e:
             results.append({"error": str(e), "message": msg})
     return results
+
+
+class ParseMessageRequest(BaseModel):
+    text: str
+    session_id: str | None = None
+    language_hint: str | None = None
+
+
+@router.post("/triage/parse-message", summary="Session-aware parse message for dialogue slot collection")
+async def parse_message(req: ParseMessageRequest):
+    # session management via app.state.session_store
+    from fastapi import Request
+    # create or fetch session store from app state
+    # we can't access app here directly; import via global settings: use singleton in main
+    try:
+        from app.main import app as _app
+        store = _app.state.session_store
+    except Exception:
+        # fallback ephemeral store
+        from app.dialogue.session_store import SessionStore
+        store = SessionStore()
+
+    sm = TriageStateMachine(store)
+
+    session_id = req.session_id or str(uuid.uuid4())
+    result = sm.process_turn(session_id=session_id, message=req.text, language_hint=req.language_hint)
+    return result

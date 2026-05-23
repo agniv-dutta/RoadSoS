@@ -13,6 +13,8 @@ from app.routers.sos     import router as sos_router
 from app.routers.health  import router as health_router
 from app.routers.admin   import router as admin_router
 from app.config import get_settings
+from app.dialogue.session_store import SessionStore
+import asyncio
 
 settings = get_settings()
 
@@ -22,7 +24,21 @@ async def lifespan(app: FastAPI):
     # Pre-warm NLU classifier on startup so first request isn't slow
     from app.nlu.pipeline import load_classifier
     load_classifier()
+    # start session cleanup task
+    app.state.session_store = SessionStore()
+
+    async def _cleanup_loop():
+        while True:
+            try:
+                app.state.session_store.cleanup_expired()
+            except Exception:
+                pass
+            await asyncio.sleep(60)
+
+    app.state._session_cleanup_task = asyncio.create_task(_cleanup_loop())
     yield
+    # cancel cleanup
+    app.state._session_cleanup_task.cancel()
 
 
 app = FastAPI(

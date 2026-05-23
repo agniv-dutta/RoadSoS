@@ -15,7 +15,10 @@ import re
 import logging
 from typing import Optional
 
-from transformers import pipeline as hf_pipeline
+try:
+    from transformers import pipeline as hf_pipeline
+except Exception:
+    hf_pipeline = None
 
 from app.nlu.slots import (
     ExtractedSlots,

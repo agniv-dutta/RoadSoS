@@ -54,6 +54,48 @@ copy .env.example .env
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
+## What is implemented (current)
+
+- Core FastAPI backend with async SQLAlchemy wiring and Alembic scaffold.
+- NLU pipeline (regex baseline + optional zero-shot intent classifier) and utilities.
+- CAP v1.2 exporter: deterministic transformer that converts NLU output into a standards-compliant CAP JSON packet (build, validate, serialize).
+- Dialogue finite-state machine (FSM) using `transitions` with per-session Machines, multilingual follow-up questions, session store with expiry, and a session-aware endpoint `POST /api/triage/parse-message`.
+- Integration of CAP exporter into the triage response (attached as `cap_alert` when valid, with `cap_validation_errors` otherwise).
+- Unit and integration tests covering CAP exporter, state machine, and triage endpoints. Run with pytest (see below).
+- Colab notebook for GPU/remote runs: `backend/app/nlu/colab_train.ipynb` (sanity training + evaluation).
+- Server run helper script: `backend/app/nlu/run_server_training.sh` (creates venv, installs deps, runs training/eval).
+
+## Running tests
+
+Activate the project venv and run pytest from the repo root (ensure PYTHONPATH points to `backend` so the `app` package imports work):
+
+Windows PowerShell:
+
+```powershell
+& ".venv\Scripts\Activate.ps1"
+$env:PYTHONPATH = "backend"
+.venv\Scripts\python.exe -m pytest backend/tests -q
+```
+
+This repository includes unit tests for the CAP exporter and dialogue FSM, plus integration tests for the triage endpoints. The full suite is green in the development environment used for this work.
+
+## Docker (optional)
+
+A minimal Dockerfile is provided to run the backend in a container. It is intended for development and smoke tests only (not optimized for production):
+
+```bash
+docker build -t roadsos-backend:latest -f backend/Dockerfile backend
+docker run --rm -p 8000:8000 --env-file backend/.env roadsos-backend:latest
+```
+
+The container starts Uvicorn serving `app.main:app` on port 8000.
+
+## Notes / Next steps
+
+- The NLU training scripts and the production joint XLM-R + CRF model are included under `backend/app/nlu/` (training requires GPUs for reasonable speed). Use the Colab notebook for quick GPU runs.
+- The FSM can export a DOT-format graph for audit (call `TriageStateMachine.export_graph(session_id)` from admin tooling).
+- If you want I can add a systemd unit, Kubernetes manifest, or CI workflow for tests and linting.
+
 ## Migrations
 
 ```bash

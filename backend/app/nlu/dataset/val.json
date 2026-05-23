@@ -1,0 +1,1349 @@
+[
+  {
+    "id": "en_082",
+    "text": "crash happened 2 ppl near road",
+    "intent": "emergency_crash",
+    "triage": "P3",
+    "language": "en",
+    "tokens": [
+      "crash",
+      "happened",
+      "2",
+      "ppl",
+      "near",
+      "road"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_090",
+    "text": "crash 3 persons trapped near school",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "crash",
+      "3",
+      "persons",
+      "trapped",
+      "near",
+      "school"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-ENTRAPMENT",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_096",
+    "text": "crash happened near junction",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "crash",
+      "happened",
+      "near",
+      "junction"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_079",
+    "text": "crash 4 ppl trapped near checkpoint",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "crash",
+      "4",
+      "ppl",
+      "trapped",
+      "near",
+      "checkpoint"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-ENTRAPMENT",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_138",
+    "text": "bad crash 4 persons near road",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "bad",
+      "crash",
+      "4",
+      "persons",
+      "near",
+      "road"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_052",
+    "text": "car in river after bridge accident 2 people inside please help",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "car",
+      "in",
+      "river",
+      "after",
+      "bridge",
+      "accident",
+      "2",
+      "people",
+      "inside",
+      "please",
+      "help"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "en_007",
+    "text": "motorbike fell rider hurt leg broken needs hospital",
+    "intent": "emergency_crash",
+    "triage": "P2",
+    "language": "en",
+    "tokens": [
+      "motorbike",
+      "fell",
+      "rider",
+      "hurt",
+      "leg",
+      "broken",
+      "needs",
+      "hospital"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "en_122",
+    "text": "tanker spill fuel near checkpoint",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "tanker",
+      "spill",
+      "fuel",
+      "near",
+      "checkpoint"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "B-HAZARD_TYPE",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_097",
+    "text": "fire petrol near school",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "fire",
+      "petrol",
+      "near",
+      "school"
+    ],
+    "bio_tags": [
+      "O",
+      "B-HAZARD_TYPE",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_135",
+    "text": "vehicle on fire near bridge",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "vehicle",
+      "on",
+      "fire",
+      "near",
+      "bridge"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "B-HAZARD_TYPE",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_088",
+    "text": "vehicle on fire petrol near road",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "en",
+    "tokens": [
+      "vehicle",
+      "on",
+      "fire",
+      "petrol",
+      "near",
+      "road"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-HAZARD_TYPE",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_115",
+    "text": "man collapsed near bridge",
+    "intent": "medical_emergency",
+    "triage": "P2",
+    "language": "en",
+    "tokens": [
+      "man",
+      "collapsed",
+      "near",
+      "bridge"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_077",
+    "text": "bleeding near highway",
+    "intent": "medical_emergency",
+    "triage": "P2",
+    "language": "en",
+    "tokens": [
+      "bleeding",
+      "near",
+      "highway"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_037",
+    "text": "someone fell from bike not serious but need first aid nearby",
+    "intent": "medical_emergency",
+    "triage": "P2",
+    "language": "en",
+    "tokens": [
+      "someone",
+      "fell",
+      "from",
+      "bike",
+      "not",
+      "serious",
+      "but",
+      "need",
+      "first",
+      "aid",
+      "nearby"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "en_124",
+    "text": "man collapsed near school",
+    "intent": "medical_emergency",
+    "triage": "P2",
+    "language": "en",
+    "tokens": [
+      "man",
+      "collapsed",
+      "near",
+      "school"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "bn_009",
+    "text": "gari palte geche keu ber hoite parteche na agun o dhorse",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "gari",
+      "palte",
+      "geche",
+      "keu",
+      "ber",
+      "hoite",
+      "parteche",
+      "na",
+      "agun",
+      "o",
+      "dhorse"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "B-HAZARD_TYPE",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_005",
+    "text": "truck palte geche dhaka sylhet highway te 3 jon blood berochhe",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "truck",
+      "palte",
+      "geche",
+      "dhaka",
+      "sylhet",
+      "highway",
+      "te",
+      "3",
+      "jon",
+      "blood",
+      "berochhe"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "I-LOCATION",
+      "I-LOCATION",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_053",
+    "text": "5 jon ghayel highway e please help",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "5",
+      "jon",
+      "ghayel",
+      "highway",
+      "e",
+      "please",
+      "help"
+    ],
+    "bio_tags": [
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_056",
+    "text": "None jon ghayel highway e please help",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "None",
+      "jon",
+      "ghayel",
+      "highway",
+      "e",
+      "please",
+      "help"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_073",
+    "text": "gari te agun lagche chittagong e log atke geche",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "gari",
+      "te",
+      "agun",
+      "lagche",
+      "chittagong",
+      "e",
+      "log",
+      "atke",
+      "geche"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_007",
+    "text": "petrol sorbochhe gari theke agun lagbe please jaldi ashun",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "petrol",
+      "sorbochhe",
+      "gari",
+      "theke",
+      "agun",
+      "lagbe",
+      "please",
+      "jaldi",
+      "ashun"
+    ],
+    "bio_tags": [
+      "B-HAZARD_TYPE",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_013",
+    "text": "gari te agun lagche petrol porte ache 2 jon andar atokte geche help",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "gari",
+      "te",
+      "agun",
+      "lagche",
+      "petrol",
+      "porte",
+      "ache",
+      "2",
+      "jon",
+      "andar",
+      "atokte",
+      "geche",
+      "help"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "B-HAZARD_TYPE",
+      "O",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-ENTRAPMENT",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_086",
+    "text": "2 jon ghayel highway e please help",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "2",
+      "jon",
+      "ghayel",
+      "highway",
+      "e",
+      "please",
+      "help"
+    ],
+    "bio_tags": [
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "en_024",
+    "text": "pls help accident hppnd near toll 2 ppl stuck petrol lkg",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "mixed",
+    "tokens": [
+      "pls",
+      "help",
+      "accident",
+      "hppnd",
+      "near",
+      "toll",
+      "2",
+      "ppl",
+      "stuck",
+      "petrol",
+      "lkg"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-ENTRAPMENT",
+      "B-HAZARD_TYPE",
+      "O"
+    ]
+  },
+  {
+    "id": "en_098",
+    "text": "need towing near toll",
+    "intent": "vehicle_assistance",
+    "triage": "P3",
+    "language": "en",
+    "tokens": [
+      "need",
+      "towing",
+      "near",
+      "toll"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_099",
+    "text": "tyre burst near market",
+    "intent": "vehicle_assistance",
+    "triage": "P3",
+    "language": "en",
+    "tokens": [
+      "tyre",
+      "burst",
+      "near",
+      "market"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "en_101",
+    "text": "need towing near checkpoint",
+    "intent": "vehicle_assistance",
+    "triage": "P3",
+    "language": "en",
+    "tokens": [
+      "need",
+      "towing",
+      "near",
+      "checkpoint"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "bn_089",
+    "text": "5 jon ghayel poth e please help",
+    "intent": "medical_emergency",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "5",
+      "jon",
+      "ghayel",
+      "poth",
+      "e",
+      "please",
+      "help"
+    ],
+    "bio_tags": [
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_069",
+    "text": "3 jon ghayel dhaka e please help",
+    "intent": "medical_emergency",
+    "triage": "P1",
+    "language": "bn",
+    "tokens": [
+      "3",
+      "jon",
+      "ghayel",
+      "dhaka",
+      "e",
+      "please",
+      "help"
+    ],
+    "bio_tags": [
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_014",
+    "text": "rickshaw auto accident e 1 jon head injury hospital kothay ache",
+    "intent": "medical_emergency",
+    "triage": "P2",
+    "language": "bn",
+    "tokens": [
+      "rickshaw",
+      "auto",
+      "accident",
+      "e",
+      "1",
+      "jon",
+      "head",
+      "injury",
+      "hospital",
+      "kothay",
+      "ache"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "hi_057",
+    "text": "accident hua highway",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "accident",
+      "hua",
+      "highway"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "hi_015",
+    "text": "crash ho gaya market",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "crash",
+      "ho",
+      "gaya",
+      "market"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "hi_026",
+    "text": "crash ho gaya school",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "crash",
+      "ho",
+      "gaya",
+      "school"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "hi_052",
+    "text": "accident hua 1 log school pe",
+    "intent": "vehicle_assistance",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "accident",
+      "hua",
+      "1",
+      "log",
+      "school",
+      "pe"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION",
+      "O"
+    ]
+  },
+  {
+    "id": "hi_045",
+    "text": "crash ho gaya toll pe 1 injured",
+    "intent": "vehicle_assistance",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "crash",
+      "ho",
+      "gaya",
+      "toll",
+      "pe",
+      "1",
+      "injured"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O"
+    ]
+  },
+  {
+    "id": "hi_040",
+    "text": "crash ho gaya toll pe 3 injured",
+    "intent": "vehicle_assistance",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "crash",
+      "ho",
+      "gaya",
+      "toll",
+      "pe",
+      "3",
+      "injured"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_062",
+    "text": "ক্র্যাশ 2 জন বহির্গামী রাস্তা",
+    "intent": "fire_hazard",
+    "triage": "P3",
+    "language": "bn_native",
+    "tokens": [
+      "ক্র্যাশ",
+      "2",
+      "জন",
+      "বহির্গামী",
+      "রাস্তা"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION",
+      "I-LOCATION"
+    ]
+  },
+  {
+    "id": "bn_094",
+    "text": "ঝগড়া 1 জন আটকে আছেন বহির্গামী রাস্তা",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "bn_native",
+    "tokens": [
+      "ঝগড়া",
+      "1",
+      "জন",
+      "আটকে",
+      "আছেন",
+      "বহির্গামী",
+      "রাস্তা"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "I-LOCATION"
+    ]
+  },
+  {
+    "id": "bn_034",
+    "text": "ঝগড়া 1 জন আটকে আছেন ব্রিজ",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "bn_native",
+    "tokens": [
+      "ঝগড়া",
+      "1",
+      "জন",
+      "আটকে",
+      "আছেন",
+      "ব্রিজ"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "th_031",
+    "text": "ชนกัน 1 คน สะพาน",
+    "intent": "fire_hazard",
+    "triage": "P2",
+    "language": "th",
+    "tokens": [
+      "ชนกัน",
+      "1",
+      "คน",
+      "สะพาน"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "th_014",
+    "text": "รถพลิกคว่ำ 2 คน ทางด่วน",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "th",
+    "tokens": [
+      "รถพลิกคว่ำ",
+      "2",
+      "คน",
+      "ทางด่วน"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "th_005",
+    "text": "อุบัติเหตุ 3 คน ติดอยู่ ทางด่วน",
+    "intent": "fire_hazard",
+    "triage": "P1",
+    "language": "th",
+    "tokens": [
+      "อุบัติเหตุ",
+      "3",
+      "คน",
+      "ติดอยู่",
+      "ทางด่วน"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "th_017",
+    "text": "ชนกัน 1 คน ใกล้โรงเรียน",
+    "intent": "emergency_crash",
+    "triage": "P2",
+    "language": "th",
+    "tokens": [
+      "ชนกัน",
+      "1",
+      "คน",
+      "ใกล้โรงเรียน"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "th_013",
+    "text": "รถพลิกคว่ำ 2 คน สะพาน",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "th",
+    "tokens": [
+      "รถพลิกคว่ำ",
+      "2",
+      "คน",
+      "สะพาน"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "th_022",
+    "text": "ชนกัน ทางด่วน",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "th",
+    "tokens": [
+      "ชนกัน",
+      "ทางด่วน"
+    ],
+    "bio_tags": [
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "si_015",
+    "text": "accident 1 loku loku school hariyata help karanna",
+    "intent": "medical_emergency",
+    "triage": "P1",
+    "language": "si",
+    "tokens": [
+      "accident",
+      "1",
+      "loku",
+      "loku",
+      "school",
+      "hariyata",
+      "help",
+      "karanna"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "si_017",
+    "text": "accident  loku loku road hariyata help karanna",
+    "intent": "medical_emergency",
+    "triage": "P3",
+    "language": "si",
+    "tokens": [
+      "accident",
+      "loku",
+      "loku",
+      "road",
+      "hariyata",
+      "help",
+      "karanna"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "bn_035",
+    "text": "ঝগড়া 2 জন হাইওয়ে",
+    "intent": "emergency_crash",
+    "triage": "P3",
+    "language": "bn_native",
+    "tokens": [
+      "ঝগড়া",
+      "2",
+      "জন",
+      "হাইওয়ে"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "bn_031",
+    "text": "দুর্ঘটনা 1 জন বহির্গামী রাস্তা",
+    "intent": "emergency_crash",
+    "triage": "P2",
+    "language": "bn_native",
+    "tokens": [
+      "দুর্ঘটনা",
+      "1",
+      "জন",
+      "বহির্গামী",
+      "রাস্তা"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION",
+      "I-LOCATION"
+    ]
+  },
+  {
+    "id": "bn_032",
+    "text": "দুর্ঘটনা 3 জন ব্রিজ",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "bn_native",
+    "tokens": [
+      "দুর্ঘটনা",
+      "3",
+      "জন",
+      "ব্রিজ"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION"
+    ]
+  },
+  {
+    "id": "hi_027",
+    "text": "crash ho gaya market pe 3 injured",
+    "intent": "medical_emergency",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "crash",
+      "ho",
+      "gaya",
+      "market",
+      "pe",
+      "3",
+      "injured"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O"
+    ]
+  },
+  {
+    "id": "hi_039",
+    "text": "crash ho gaya highway pe 2 injured",
+    "intent": "medical_emergency",
+    "triage": "P3",
+    "language": "hi",
+    "tokens": [
+      "crash",
+      "ho",
+      "gaya",
+      "highway",
+      "pe",
+      "2",
+      "injured"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O"
+    ]
+  },
+  {
+    "id": "hi_060",
+    "text": "crash ho gaya highway pe 1 injured",
+    "intent": "medical_emergency",
+    "triage": "P2",
+    "language": "hi",
+    "tokens": [
+      "crash",
+      "ho",
+      "gaya",
+      "highway",
+      "pe",
+      "1",
+      "injured"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O"
+    ]
+  },
+  {
+    "id": "si_018",
+    "text": "accident  loku loku road hariyata help karanna",
+    "intent": "emergency_crash",
+    "triage": "P1",
+    "language": "si",
+    "tokens": [
+      "accident",
+      "loku",
+      "loku",
+      "road",
+      "hariyata",
+      "help",
+      "karanna"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "si_006",
+    "text": "accident 2 loku loku junction hariyata help karanna",
+    "intent": "emergency_crash",
+    "triage": "P3",
+    "language": "si",
+    "tokens": [
+      "accident",
+      "2",
+      "loku",
+      "loku",
+      "junction",
+      "hariyata",
+      "help",
+      "karanna"
+    ],
+    "bio_tags": [
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "O",
+      "O"
+    ]
+  },
+  {
+    "id": "hi_017",
+    "text": "accident hua 3 log highway pe",
+    "intent": "medical_emergency",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "accident",
+      "hua",
+      "3",
+      "log",
+      "highway",
+      "pe"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O",
+      "B-LOCATION",
+      "O"
+    ]
+  },
+  {
+    "id": "hi_016",
+    "text": "crash ho gaya school pe 2 injured",
+    "intent": "medical_emergency",
+    "triage": "P1",
+    "language": "hi",
+    "tokens": [
+      "crash",
+      "ho",
+      "gaya",
+      "school",
+      "pe",
+      "2",
+      "injured"
+    ],
+    "bio_tags": [
+      "O",
+      "O",
+      "O",
+      "B-LOCATION",
+      "O",
+      "B-CASUALTY_COUNT",
+      "O"
+    ]
+  }
+]

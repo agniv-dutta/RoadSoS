@@ -1,0 +1,1524 @@
+{
+  "bn": [
+    {
+      "id": "bn_015",
+      "text": "bridge er upore accident hoise bus er 8 jon injured please aashun",
+      "tokens": [
+        "bridge",
+        "er",
+        "upore",
+        "accident",
+        "hoise",
+        "bus",
+        "er",
+        "8",
+        "jon",
+        "injured",
+        "please",
+        "aashun"
+      ],
+      "bio_tags": [
+        "B-LOCATION",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_004",
+      "text": "bachcha road e porte geche gari chapa diyeche ekhuni help chai",
+      "tokens": [
+        "bachcha",
+        "road",
+        "e",
+        "porte",
+        "geche",
+        "gari",
+        "chapa",
+        "diyeche",
+        "ekhuni",
+        "help",
+        "chai"
+      ],
+      "bio_tags": [
+        "B-CHILD_INVOLVED",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_054",
+      "text": "5 jon ghayel toll e please help",
+      "tokens": [
+        "5",
+        "jon",
+        "ghayel",
+        "toll",
+        "e",
+        "please",
+        "help"
+      ],
+      "bio_tags": [
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_046",
+      "text": "2 jon ghayel toll e please help",
+      "tokens": [
+        "2",
+        "jon",
+        "ghayel",
+        "toll",
+        "e",
+        "please",
+        "help"
+      ],
+      "bio_tags": [
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_041",
+      "text": "accident hoyeche None jon bridge e",
+      "tokens": [
+        "accident",
+        "hoyeche",
+        "None",
+        "jon",
+        "bridge",
+        "e"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_018",
+      "text": "accident er pore ekjon unconscious hoya geche blood berochhe",
+      "tokens": [
+        "accident",
+        "er",
+        "pore",
+        "ekjon",
+        "unconscious",
+        "hoya",
+        "geche",
+        "blood",
+        "berochhe"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_014",
+      "text": "rickshaw auto accident e 1 jon head injury hospital kothay ache",
+      "tokens": [
+        "rickshaw",
+        "auto",
+        "accident",
+        "e",
+        "1",
+        "jon",
+        "head",
+        "injury",
+        "hospital",
+        "kothay",
+        "ache"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_099",
+      "text": "accident hoyeche 5 jon chittagong e",
+      "tokens": [
+        "accident",
+        "hoyeche",
+        "5",
+        "jon",
+        "chittagong",
+        "e"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_012",
+      "text": "bachha school bus e atokte geche bus palte geche please help",
+      "tokens": [
+        "bachha",
+        "school",
+        "bus",
+        "e",
+        "atokte",
+        "geche",
+        "bus",
+        "palte",
+        "geche",
+        "please",
+        "help"
+      ],
+      "bio_tags": [
+        "B-CHILD_INVOLVED",
+        "O",
+        "O",
+        "O",
+        "B-ENTRAPMENT",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "bn_076",
+      "text": "gari te agun lagche highway e log atke geche",
+      "tokens": [
+        "gari",
+        "te",
+        "agun",
+        "lagche",
+        "highway",
+        "e",
+        "log",
+        "atke",
+        "geche"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-HAZARD_TYPE",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    }
+  ],
+  "bn_native": [
+    {
+      "id": "bn_023",
+      "text": "দুর্ঘটনা 3 জন স্কুল",
+      "tokens": [
+        "দুর্ঘটনা",
+        "3",
+        "জন",
+        "স্কুল"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_022",
+      "text": "ঝগড়া 1 জন স্কুল",
+      "tokens": [
+        "ঝগড়া",
+        "1",
+        "জন",
+        "স্কুল"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_029",
+      "text": "ঝগড়া 1 জন ব্রিজ",
+      "tokens": [
+        "ঝগড়া",
+        "1",
+        "জন",
+        "ব্রিজ"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_045",
+      "text": "দুর্ঘটনা 2 জন আটকে আছেন হাইওয়ে",
+      "tokens": [
+        "দুর্ঘটনা",
+        "2",
+        "জন",
+        "আটকে",
+        "আছেন",
+        "হাইওয়ে"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_047",
+      "text": "ঝগড়া 1 জন আটকে আছেন বহির্গামী রাস্তা",
+      "tokens": [
+        "ঝগড়া",
+        "1",
+        "জন",
+        "আটকে",
+        "আছেন",
+        "বহির্গামী",
+        "রাস্তা"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "I-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_106",
+      "text": "ঝগড়া 1 জন ব্রিজ",
+      "tokens": [
+        "ঝগড়া",
+        "1",
+        "জন",
+        "ব্রিজ"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_115",
+      "text": "ঝগড়া স্কুল",
+      "tokens": [
+        "ঝগড়া",
+        "স্কুল"
+      ],
+      "bio_tags": [
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_043",
+      "text": "ঝগড়া আটকে আছেন স্কুল",
+      "tokens": [
+        "ঝগড়া",
+        "আটকে",
+        "আছেন",
+        "স্কুল"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_093",
+      "text": "ঝগড়া স্কুল",
+      "tokens": [
+        "ঝগড়া",
+        "স্কুল"
+      ],
+      "bio_tags": [
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "bn_031",
+      "text": "দুর্ঘটনা 1 জন বহির্গামী রাস্তা",
+      "tokens": [
+        "দুর্ঘটনা",
+        "1",
+        "জন",
+        "বহির্গামী",
+        "রাস্তা"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION",
+        "I-LOCATION"
+      ]
+    }
+  ],
+  "en": [
+    {
+      "id": "en_128",
+      "text": "fire near bridge",
+      "tokens": [
+        "fire",
+        "near",
+        "bridge"
+      ],
+      "bio_tags": [
+        "B-HAZARD_TYPE",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "en_085",
+      "text": "accident 2 ppl near school",
+      "tokens": [
+        "accident",
+        "2",
+        "ppl",
+        "near",
+        "school"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "en_002",
+      "text": "big accident on highway truck fell 2 people bleeding badly",
+      "tokens": [
+        "big",
+        "accident",
+        "on",
+        "highway",
+        "truck",
+        "fell",
+        "2",
+        "people",
+        "bleeding",
+        "badly"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_052",
+      "text": "car in river after bridge accident 2 people inside please help",
+      "tokens": [
+        "car",
+        "in",
+        "river",
+        "after",
+        "bridge",
+        "accident",
+        "2",
+        "people",
+        "inside",
+        "please",
+        "help"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_122",
+      "text": "tanker spill fuel near checkpoint",
+      "tokens": [
+        "tanker",
+        "spill",
+        "fuel",
+        "near",
+        "checkpoint"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-HAZARD_TYPE",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "en_101",
+      "text": "need towing near checkpoint",
+      "tokens": [
+        "need",
+        "towing",
+        "near",
+        "checkpoint"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "en_051",
+      "text": "multiple people hurt near roundabout some trapped in vehicles",
+      "tokens": [
+        "multiple",
+        "people",
+        "hurt",
+        "near",
+        "roundabout",
+        "some",
+        "trapped",
+        "in",
+        "vehicles"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "B-ENTRAPMENT",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_069",
+      "text": "accident 1 ppl near bridge",
+      "tokens": [
+        "accident",
+        "1",
+        "ppl",
+        "near",
+        "bridge"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "en_100",
+      "text": "fire petrol near school",
+      "tokens": [
+        "fire",
+        "petrol",
+        "near",
+        "school"
+      ],
+      "bio_tags": [
+        "O",
+        "B-HAZARD_TYPE",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "en_035",
+      "text": "truck overturned spilling fuel please evacuate area fire danger",
+      "tokens": [
+        "truck",
+        "overturned",
+        "spilling",
+        "fuel",
+        "please",
+        "evacuate",
+        "area",
+        "fire",
+        "danger"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-HAZARD_TYPE",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    }
+  ],
+  "hi": [
+    {
+      "id": "hi_006",
+      "text": "accident hua 1 log school pe",
+      "tokens": [
+        "accident",
+        "hua",
+        "1",
+        "log",
+        "school",
+        "pe"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION",
+        "O"
+      ]
+    },
+    {
+      "id": "hi_025",
+      "text": "accident hua 3 log highway pe",
+      "tokens": [
+        "accident",
+        "hua",
+        "3",
+        "log",
+        "highway",
+        "pe"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION",
+        "O"
+      ]
+    },
+    {
+      "id": "hi_007",
+      "text": "crash ho gaya toll",
+      "tokens": [
+        "crash",
+        "ho",
+        "gaya",
+        "toll"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "hi_023",
+      "text": "accident hua 1 log market pe",
+      "tokens": [
+        "accident",
+        "hua",
+        "1",
+        "log",
+        "market",
+        "pe"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION",
+        "O"
+      ]
+    },
+    {
+      "id": "hi_055",
+      "text": "crash ho gaya market",
+      "tokens": [
+        "crash",
+        "ho",
+        "gaya",
+        "market"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "hi_057",
+      "text": "accident hua highway",
+      "tokens": [
+        "accident",
+        "hua",
+        "highway"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "hi_039",
+      "text": "crash ho gaya highway pe 2 injured",
+      "tokens": [
+        "crash",
+        "ho",
+        "gaya",
+        "highway",
+        "pe",
+        "2",
+        "injured"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O"
+      ]
+    },
+    {
+      "id": "hi_017",
+      "text": "accident hua 3 log highway pe",
+      "tokens": [
+        "accident",
+        "hua",
+        "3",
+        "log",
+        "highway",
+        "pe"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION",
+        "O"
+      ]
+    },
+    {
+      "id": "hi_052",
+      "text": "accident hua 1 log school pe",
+      "tokens": [
+        "accident",
+        "hua",
+        "1",
+        "log",
+        "school",
+        "pe"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION",
+        "O"
+      ]
+    },
+    {
+      "id": "hi_003",
+      "text": "accident hua school",
+      "tokens": [
+        "accident",
+        "hua",
+        "school"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    }
+  ],
+  "mixed": [
+    {
+      "id": "en_057",
+      "text": "gaadi toh thoda sa hua hai sab theek hai bas police chahiye",
+      "tokens": [
+        "gaadi",
+        "toh",
+        "thoda",
+        "sa",
+        "hua",
+        "hai",
+        "sab",
+        "theek",
+        "hai",
+        "bas",
+        "police",
+        "chahiye"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_025",
+      "text": "hlp!! gari ultey geche 3 jon blood berochhe jldi aao",
+      "tokens": [
+        "hlp",
+        "gari",
+        "ultey",
+        "geche",
+        "3",
+        "jon",
+        "blood",
+        "berochhe",
+        "jldi",
+        "aao"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_042",
+      "text": "ACCIDENT HOISE 2 LOG PHANSE FIRE LAGCHE JALDI",
+      "tokens": [
+        "ACCIDENT",
+        "HOISE",
+        "2",
+        "LOG",
+        "PHANSE",
+        "FIRE",
+        "LAGCHE",
+        "JALDI"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-ENTRAPMENT",
+        "B-HAZARD_TYPE",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_015",
+      "text": "bhaiya crash ho gaya highway pe 2 log bleeding badly help karo",
+      "tokens": [
+        "bhaiya",
+        "crash",
+        "ho",
+        "gaya",
+        "highway",
+        "pe",
+        "2",
+        "log",
+        "bleeding",
+        "badly",
+        "help",
+        "karo"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_024",
+      "text": "pls help accident hppnd near toll 2 ppl stuck petrol lkg",
+      "tokens": [
+        "pls",
+        "help",
+        "accident",
+        "hppnd",
+        "near",
+        "toll",
+        "2",
+        "ppl",
+        "stuck",
+        "petrol",
+        "lkg"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-ENTRAPMENT",
+        "B-HAZARD_TYPE",
+        "O"
+      ]
+    },
+    {
+      "id": "en_043",
+      "text": "bhaiya bhaiya gaadi crash ho gayi 3 bache phanse hai jaldi aao",
+      "tokens": [
+        "bhaiya",
+        "bhaiya",
+        "gaadi",
+        "crash",
+        "ho",
+        "gayi",
+        "3",
+        "bache",
+        "phanse",
+        "hai",
+        "jaldi",
+        "aao"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "B-CHILD_INVOLVED",
+        "B-ENTRAPMENT",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_018",
+      "text": "accident hoye geche bhai 1 ta baccha hurt please hospital kothay",
+      "tokens": [
+        "accident",
+        "hoye",
+        "geche",
+        "bhai",
+        "1",
+        "ta",
+        "baccha",
+        "hurt",
+        "please",
+        "hospital",
+        "kothay"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-CHILD_INVOLVED",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_016",
+      "text": "crash hoise road e 4 jon atokte geche please ambulance dao",
+      "tokens": [
+        "crash",
+        "hoise",
+        "road",
+        "e",
+        "4",
+        "jon",
+        "atokte",
+        "geche",
+        "please",
+        "ambulance",
+        "dao"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-ENTRAPMENT",
+        "O",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_044",
+      "text": "help help accident hoyce 4 jon blood beroche petrol o pore",
+      "tokens": [
+        "help",
+        "help",
+        "accident",
+        "hoyce",
+        "4",
+        "jon",
+        "blood",
+        "beroche",
+        "petrol",
+        "o",
+        "pore"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "O",
+        "B-HAZARD_TYPE",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "en_019",
+      "text": "road e garir sathe garir dhakka laglo 2 joner chot petrol porte ache",
+      "tokens": [
+        "road",
+        "e",
+        "garir",
+        "sathe",
+        "garir",
+        "dhakka",
+        "laglo",
+        "2",
+        "joner",
+        "chot",
+        "petrol",
+        "porte",
+        "ache"
+      ],
+      "bio_tags": [
+        "B-LOCATION",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-HAZARD_TYPE",
+        "O",
+        "O"
+      ]
+    }
+  ],
+  "si": [
+    {
+      "id": "si_019",
+      "text": "accident 1 loku loku school hariyata help karanna",
+      "tokens": [
+        "accident",
+        "1",
+        "loku",
+        "loku",
+        "school",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_007",
+      "text": "accident 2 loku loku road hariyata help karanna",
+      "tokens": [
+        "accident",
+        "2",
+        "loku",
+        "loku",
+        "road",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_003",
+      "text": "accident  loku loku school hariyata help karanna",
+      "tokens": [
+        "accident",
+        "loku",
+        "loku",
+        "school",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_002",
+      "text": "accident 2 loku loku school hariyata help karanna",
+      "tokens": [
+        "accident",
+        "2",
+        "loku",
+        "loku",
+        "school",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_008",
+      "text": "accident 2 loku loku school hariyata help karanna",
+      "tokens": [
+        "accident",
+        "2",
+        "loku",
+        "loku",
+        "school",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_013",
+      "text": "accident 1 loku loku road hariyata help karanna",
+      "tokens": [
+        "accident",
+        "1",
+        "loku",
+        "loku",
+        "road",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_005",
+      "text": "accident 2 loku loku road hariyata help karanna",
+      "tokens": [
+        "accident",
+        "2",
+        "loku",
+        "loku",
+        "road",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_017",
+      "text": "accident  loku loku road hariyata help karanna",
+      "tokens": [
+        "accident",
+        "loku",
+        "loku",
+        "road",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_004",
+      "text": "accident  loku loku junction hariyata help karanna",
+      "tokens": [
+        "accident",
+        "loku",
+        "loku",
+        "junction",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    },
+    {
+      "id": "si_015",
+      "text": "accident 1 loku loku school hariyata help karanna",
+      "tokens": [
+        "accident",
+        "1",
+        "loku",
+        "loku",
+        "school",
+        "hariyata",
+        "help",
+        "karanna"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION",
+        "O",
+        "O",
+        "O"
+      ]
+    }
+  ],
+  "th": [
+    {
+      "id": "th_025",
+      "text": "ชนกัน 1 คน ติดอยู่ สะพาน",
+      "tokens": [
+        "ชนกัน",
+        "1",
+        "คน",
+        "ติดอยู่",
+        "สะพาน"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_018",
+      "text": "อุบัติเหตุ ติดอยู่ ทางด่วน",
+      "tokens": [
+        "อุบัติเหตุ",
+        "ติดอยู่",
+        "ทางด่วน"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_030",
+      "text": "ชนกัน 3 คน ติดอยู่ ทางด่วน",
+      "tokens": [
+        "ชนกัน",
+        "3",
+        "คน",
+        "ติดอยู่",
+        "ทางด่วน"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_024",
+      "text": "อุบัติเหตุ 2 คน สะพาน",
+      "tokens": [
+        "อุบัติเหตุ",
+        "2",
+        "คน",
+        "สะพาน"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_011",
+      "text": "ชนกัน 3 คน ติดอยู่ ถนนหลวง",
+      "tokens": [
+        "ชนกัน",
+        "3",
+        "คน",
+        "ติดอยู่",
+        "ถนนหลวง"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_037",
+      "text": "อุบัติเหตุ 3 คน ใกล้โรงเรียน",
+      "tokens": [
+        "อุบัติเหตุ",
+        "3",
+        "คน",
+        "ใกล้โรงเรียน"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_023",
+      "text": "รถพลิกคว่ำ 1 คน ใกล้โรงเรียน",
+      "tokens": [
+        "รถพลิกคว่ำ",
+        "1",
+        "คน",
+        "ใกล้โรงเรียน"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_014",
+      "text": "รถพลิกคว่ำ 2 คน ทางด่วน",
+      "tokens": [
+        "รถพลิกคว่ำ",
+        "2",
+        "คน",
+        "ทางด่วน"
+      ],
+      "bio_tags": [
+        "O",
+        "B-CASUALTY_COUNT",
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_039",
+      "text": "อุบัติเหตุ ใกล้โรงเรียน",
+      "tokens": [
+        "อุบัติเหตุ",
+        "ใกล้โรงเรียน"
+      ],
+      "bio_tags": [
+        "O",
+        "B-LOCATION"
+      ]
+    },
+    {
+      "id": "th_034",
+      "text": "อุบัติเหตุ ติดอยู่ สะพาน",
+      "tokens": [
+        "อุบัติเหตุ",
+        "ติดอยู่",
+        "สะพาน"
+      ],
+      "bio_tags": [
+        "O",
+        "O",
+        "B-LOCATION"
+      ]
+    }
+  ]
+}

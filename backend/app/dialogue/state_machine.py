@@ -10,6 +10,7 @@ except Exception:
     # fallback stub for environments without transformers during tests; tests will monkeypatch this
     def run_nlu_pipeline(message: str):
         return {"intent": "unknown", "triage_level": "P3", "confidence": 0.0, "slots": {}, "language": "en", "raw_text": message}
+from app.nlu.inference_engine import normalise_slot_keys
 from app.nlu.cap_exporter import CAPv12Exporter
 from app.dialogue.session_store import SessionStore, SessionState
 
@@ -90,7 +91,7 @@ class TriageStateMachine:
         # Run NLU parse on message
         nlu = run_nlu_pipeline(message)
         # ensure slots dict
-        slots = nlu.get("slots") or {}
+        slots = normalise_slot_keys(nlu.get("slots") or {})
 
         # Fill any slots found in this message into session
         for k, v in slots.items():
@@ -99,6 +100,7 @@ class TriageStateMachine:
 
         # Determine triage level from NLU or previous session
         triage = nlu.get("triage_level") or nlu.get("triage") or s.filled_slots.get("triage") or "P3"
+        intent = nlu.get("intent") or "unknown"
         # Identify critical missing slots for P1
         missing = []
         if triage == "P1":
@@ -140,6 +142,7 @@ class TriageStateMachine:
                 "missing_slots": [],
                 "follow_up_question": None,
                 "triage_result": triage,
+                "intent": intent,
                 "cap_alert": (cap if valid else None),
                 "cap_validation_errors": (errors if not valid else None),
             }
@@ -205,6 +208,7 @@ class TriageStateMachine:
             "missing_slots": missing,
             "follow_up_question": question,
             "triage_result": triage,
+            "intent": intent,
             "cap_alert": None,
             "cap_validation_errors": None,
         }

@@ -14,6 +14,7 @@ from app.routers.health  import router as health_router
 from app.routers.admin   import router as admin_router
 from app.config import get_settings
 from app.dialogue.session_store import SessionStore
+from app.nlu.pipeline import load_classifier
 import asyncio
 
 settings = get_settings()
@@ -21,9 +22,12 @@ settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Pre-warm NLU classifier on startup so first request isn't slow
-    from app.nlu.pipeline import load_classifier
-    load_classifier()
+    # Pre-warm the ONNX-backed NLU engine on startup so first request isn't slow.
+    app.state.nlu_engine = load_classifier()
+    try:
+        app.state.nlu_engine.warm_up()
+    except Exception:
+        pass
     # start session cleanup task
     app.state.session_store = SessionStore()
 

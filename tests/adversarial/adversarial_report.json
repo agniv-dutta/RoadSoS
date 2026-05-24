@@ -1,0 +1,1576 @@
+{
+  "phase_a": {
+    "pass_rate": 0.52,
+    "intent_acc": 0.68,
+    "slot_f1_by_slot": {
+      "CASUALTY_COUNT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 22.0
+      },
+      "ENTRAPMENT": {
+        "precision": 0.84,
+        "recall": 0.84,
+        "f1": 0.84,
+        "support": 25.0
+      },
+      "HAZARD_TYPE": {
+        "precision": 0.92,
+        "recall": 0.92,
+        "f1": 0.92,
+        "support": 25.0
+      },
+      "CHILD_INVOLVED": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 25.0
+      },
+      "LOCATION": {
+        "precision": 0.875,
+        "recall": 0.56,
+        "f1": 0.6829,
+        "support": 25.0
+      }
+    },
+    "no_crash_rate": 1.0,
+    "failures": [
+      {
+        "id": "A-001",
+        "text": "রক্ত বের হচ্ছে... তাড়াতাড়ি আসুন হাইওয়েতে! অনেক মানুষ!",
+        "expected": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "casualties": null,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P2",
+          "slots": {
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "এটি ঠিক কোথায় হয়েছে? নিকটস্থ ল্যান্ডমার্ক, রোডের নাম বা এলাকা বলুন।",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,triage_mismatch"
+      },
+      {
+        "id": "A-003",
+        "text": "bus উল্টে গেছে, 4 jon trapped, bridge er kache",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "bridge"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "A-004",
+        "text": "আগুন লাগছে, petrol leak, 2 ta lok ase ভিতরে, road side",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "fuel_leak",
+            "child_involved": false,
+            "location_mention": "road side"
+          }
+        },
+        "actual": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fuel_leak",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "এটি ঠিক কোথায় হয়েছে? নিকটস্থ ল্যান্ডমার্ক, রোডের নাম বা এলাকা বলুন।",
+          "status_code": 200
+        },
+        "failure_reason": "slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "A-005",
+        "text": "school bus crash, bachha ache, 5 জন hurt, NH2",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 5,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": true,
+            "location_mention": "NH2"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 5,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": true,
+            "LOCATION": "school"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "slot_mismatch:LOCATION"
+      },
+      {
+        "id": "A-009",
+        "text": "รถชน... คนเจ็บเยอะ... highway... ช่วยที",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": null,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P2",
+          "slots": {
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,triage_mismatch,follow_up_not_triggered"
+      },
+      {
+        "id": "A-010",
+        "text": "ไฟไหม้รถเลย 3 คนติดอยู่ bridge",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "bridge"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "A-012",
+        "text": "รถพลิกคว่ำ 2 คน stuck, highway",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "A-018",
+        "text": "bus crash!! kids inside!! 4 injured!! toll road",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": true,
+            "location_mention": "toll road"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": true,
+            "LOCATION": "toll"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "A-021",
+        "text": "need towing, crash, 2 people stuck, bridge",
+        "expected": {
+          "intent": "vehicle_assistance",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "bridge"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "A-022",
+        "text": "दुर्घटना... 4 लोग फंसे हैं... highway... help",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "A-023",
+        "text": "आग लग गई, 1 आदमी trapped, NH7",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 1,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "NH7"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 1,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "यह घटना ठीक कहाँ हुई? नज़दीकी लैंडमार्क, सड़क का नाम, या क्षेत्र बताइए?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "A-025",
+        "text": "school bus accident, baccha bachao, 5 injured, bridge",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 5,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": true,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 5,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": true,
+            "LOCATION": "school"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "slot_mismatch:LOCATION"
+      }
+    ]
+  },
+  "phase_b": {
+    "pass_rate": 0.12,
+    "intent_acc": 0.16,
+    "slot_f1_by_slot": {
+      "CASUALTY_COUNT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 22.0
+      },
+      "ENTRAPMENT": {
+        "precision": 0.68,
+        "recall": 0.68,
+        "f1": 0.68,
+        "support": 25.0
+      },
+      "HAZARD_TYPE": {
+        "precision": 0.6,
+        "recall": 0.6,
+        "f1": 0.6,
+        "support": 25.0
+      },
+      "CHILD_INVOLVED": {
+        "precision": 0.96,
+        "recall": 0.96,
+        "f1": 0.96,
+        "support": 25.0
+      },
+      "LOCATION": {
+        "precision": 1.0,
+        "recall": 0.4783,
+        "f1": 0.6471,
+        "support": 23.0
+      }
+    },
+    "no_crash_rate": 1.0,
+    "failures": [
+      {
+        "id": "B-001",
+        "text": "ช่วบด่วย มีรถชนรุนแรงม้ากกก ไฟใหม้ด้วย",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": null,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": null
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P2",
+          "slots": {
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "เหตุการณ์เกิดขึ้นที่ไหน? ใกล้จุดสังเกต ถนน หรือพื้นที่ใด?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,triage_mismatch,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-002",
+        "text": "accidetn!! 3 poeple stck insid car helppp NH48",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "NH48"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "Where exactly did this happen? Nearest landmark, road name, or area?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "B-003",
+        "text": "agn lg gi truck mein!! ptrool bhi lk rha h!! NH58 pr",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": null,
+            "entrapment": false,
+            "hazard_type": "fuel_leak",
+            "child_involved": false,
+            "location_mention": "NH58"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P2",
+          "slots": {
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "Where exactly did this happen? Nearest landmark, road name, or area?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,triage_mismatch,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-004",
+        "text": "pleaseeeee helppppp aagun lageche gaaaaarir andar lok ache!!!!!",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": null,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": null
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "Where exactly did this happen? Nearest landmark, road name, or area?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-005",
+        "text": "tuck overturned on he way to Pune 2 people coughed inside",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "pune"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "on he way to pune 2"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "B-006",
+        "text": "ชวยดวย รถชน คนบาดเจบ 4 คน ตดอยในรถ ทางหลวง",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "เหตุการณ์เกิดขึ้นที่ไหน? ใกล้จุดสังเกต ถนน หรือพื้นที่ใด?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "B-007",
+        "text": "3 log mrge h, 2 log phns h andar gdi ke, aag bhi h, AH2",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "AH2"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "Where exactly did this happen? Nearest landmark, road name, or area?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "B-008",
+        "text": "the car has over turn on the bridge 2 people inside they cannot come out petrol coming out",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "fuel_leak",
+            "child_involved": false,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "on the bridge 2"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-009",
+        "text": "help plees, 5 people in bus, fireee and smokee, highwayyy",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 5,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 5,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "Where exactly did this happen? Nearest landmark, road name, or area?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-010",
+        "text": "รถชนรุนแรงมากๆๆ ไฟไหม้!! 2 คนติดอยู่ bridge",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P2",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "bridge"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,triage_mismatch,slot_mismatch:ENTRAPMENT,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-011",
+        "text": "अकसिडेंट हुआ 3 लोग फंसे हैं हाईवे पर!!!",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "यह घटना ठीक कहाँ हुई? नज़दीकी लैंडमार्क, सड़क का नाम, या क्षेत्र बताइए?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "B-013",
+        "text": "help!!! 2 peopel inside car at bridge!!!",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "bridge"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "B-014",
+        "text": "aagun leegechhe road e 1 jon ase bhetore",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 1,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "road"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P2",
+          "slots": {
+            "CASUALTY_COUNT": 1,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "Where exactly did this happen? Nearest landmark, road name, or area?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,triage_mismatch,slot_mismatch:ENTRAPMENT,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-016",
+        "text": "ไฟใหม้ รถคว่ำ 3 คน เจ็บมากกก NH9",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "NH9"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "เหตุการณ์เกิดขึ้นที่ไหน? ใกล้จุดสังเกต ถนน หรือพื้นที่ใด?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-017",
+        "text": "road accident, 2 ppl trapped, smoke, NH48",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "NH48"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "Where exactly did this happen? Nearest landmark, road name, or area?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "B-019",
+        "text": "3 คนเจ็บ รถชน highway มีไฟ",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-020",
+        "text": "accidenttt 5 people trappd on expressway",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 5,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "expressway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 5,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "on expressway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "B-021",
+        "text": "দুর্ঘটনা 2 জন আহত, highway এ, help!!!",
+        "expected": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P2",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,triage_mismatch"
+      },
+      {
+        "id": "B-022",
+        "text": "petrool leak on NH7 with fire, 1 person stck",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 1,
+            "entrapment": true,
+            "hazard_type": "fuel_leak",
+            "child_involved": false,
+            "location_mention": "NH7"
+          }
+        },
+        "actual": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 1,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "on nh7 with fire,"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "slot_mismatch:ENTRAPMENT,slot_mismatch:HAZARD_TYPE"
+      },
+      {
+        "id": "B-023",
+        "text": "รถชนแรงมากกกก 2 คนในรถ ทางหลวง",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P2",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "เหตุการณ์เกิดขึ้นที่ไหน? ใกล้จุดสังเกต ถนน หรือพื้นที่ใด?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,triage_mismatch"
+      },
+      {
+        "id": "B-024",
+        "text": "3 log phnse h, aag bhi h, road parr",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "road"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "Where exactly did this happen? Nearest landmark, road name, or area?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "B-025",
+        "text": "help!! बच्चे हैं बस में!! road side!! 4 injuredd",
+        "expected": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": true,
+            "location_mention": "road side"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "यह घटना ठीक कहाँ हुई? नज़दीकी लैंडमार्क, सड़क का नाम, या क्षेत्र बताइए?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:CHILD_INVOLVED"
+      }
+    ]
+  },
+  "phase_c": {
+    "pass_rate": 0.32,
+    "intent_acc": 0.44,
+    "slot_f1_by_slot": {
+      "CASUALTY_COUNT": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 25.0
+      },
+      "ENTRAPMENT": {
+        "precision": 0.76,
+        "recall": 0.76,
+        "f1": 0.76,
+        "support": 25.0
+      },
+      "HAZARD_TYPE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 25.0
+      },
+      "CHILD_INVOLVED": {
+        "precision": 0.96,
+        "recall": 0.96,
+        "f1": 0.96,
+        "support": 25.0
+      },
+      "LOCATION": {
+        "precision": 0.8889,
+        "recall": 0.64,
+        "f1": 0.7442,
+        "support": 25.0
+      }
+    },
+    "no_crash_rate": 1.0,
+    "failures": [
+      {
+        "id": "C-003",
+        "text": "รถชน highway, 2 people trapped ในรถ, petrol leak ด้วย",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": true,
+            "hazard_type": "fuel_leak",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "fuel_leak",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-005",
+        "text": "दुर्घटना on expressway, 4 लोग फंसे, ambulance जल्दी",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": true,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "expressway"
+          }
+        },
+        "actual": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "on expressway,"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "C-007",
+        "text": "Bus crash වෙලා, children inside, 6 injured, NH7",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 6,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": true,
+            "location_mention": "NH7"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 6,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": true
+          },
+          "follow_up_question": "මෙය ඇත්තටම කොහිද සිදුවා තිබෙන්නේ? නීරදිස්ථාන, මාර්ග නාමය හෝ ප්‍රදේශය කියන්න.",
+          "status_code": 200
+        },
+        "failure_reason": "slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "C-008",
+        "text": "road side accident, 3 คนเจ็บ, help asap",
+        "expected": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "road side"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "เหตุการณ์เกิดขึ้นที่ไหน? ใกล้จุดสังเกต ถนน หรือพื้นที่ใด?",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-010",
+        "text": "হাইওয়েতে accident, 5 injured, बच्चों को help करें",
+        "expected": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "casualties": 5,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": true,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 5,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "এটি ঠিক কোথায় হয়েছে? নিকটস্থ ল্যান্ডমার্ক, রোডের নাম বা এলাকা বলুন।",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:CHILD_INVOLVED"
+      },
+      {
+        "id": "C-011",
+        "text": "ช่วยด่วย accident on highway, 3 injured, fire มาแล้ว",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "on highway,"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-013",
+        "text": "รถชนแรงมาก on bridge, 4 คนเจ็บ, kids inside",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": true,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": true,
+            "LOCATION": "on bridge,"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "C-014",
+        "text": "road crash, 1 জন trapped, fire, expressway",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 1,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "expressway"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 1,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "এটি ঠিক কোথায় হয়েছে? নিকটস্থ ল্যান্ডমার্ক, রোডের নাম বা এলাকা বলুন।",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-016",
+        "text": "gari accident, 2 জন injured, fire smoke, bridge",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "bridge"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-017",
+        "text": "fire on bus, 4 คนติดอยู่, highway",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": true,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "on bus,"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "slot_mismatch:ENTRAPMENT,slot_mismatch:LOCATION"
+      },
+      {
+        "id": "C-018",
+        "text": "3 people আহত, accident on NH2, please come দ্রুত",
+        "expected": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "casualties": 3,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "NH2"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 3,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "on nh2,"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-019",
+        "text": "school bus दुर्घटना, children inside, 5 injured, road side",
+        "expected": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "casualties": 5,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": true,
+            "location_mention": "road side"
+          }
+        },
+        "actual": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 5,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": true,
+            "LOCATION": "school"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch,slot_mismatch:ENTRAPMENT,slot_mismatch:LOCATION"
+      },
+      {
+        "id": "C-020",
+        "text": "Highway එකේ accident වෙලා, 2 injured, petrol leak",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": false,
+            "hazard_type": "fuel_leak",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fuel_leak",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-022",
+        "text": "accident হইছে, 4 लोग injured, highway, fire",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 4,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": false,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 4,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": false,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-023",
+        "text": "รถชน highway, 2 people, children inside, smoke",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": true,
+            "location_mention": "highway"
+          }
+        },
+        "actual": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": true,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": true,
+            "LOCATION": "highway"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "slot_mismatch:ENTRAPMENT"
+      },
+      {
+        "id": "C-024",
+        "text": "expressway দুর্ঘটনা, 6 আহত, help now",
+        "expected": {
+          "intent": "medical_emergency",
+          "triage": "P1",
+          "slots": {
+            "casualties": 6,
+            "entrapment": false,
+            "hazard_type": "none",
+            "child_involved": false,
+            "location_mention": "expressway"
+          }
+        },
+        "actual": {
+          "intent": "general_help",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 6,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "none",
+            "CHILD_INVOLVED": false
+          },
+          "follow_up_question": "এটি ঠিক কোথায় হয়েছে? নিকটস্থ ল্যান্ডমার্ক, রোডের নাম বা এলাকা বলুন।",
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      },
+      {
+        "id": "C-025",
+        "text": "bridge එක ළඟ truck crash, 2 injured, fire, child in van",
+        "expected": {
+          "intent": "fire_hazard",
+          "triage": "P1",
+          "slots": {
+            "casualties": 2,
+            "entrapment": false,
+            "hazard_type": "fire",
+            "child_involved": true,
+            "location_mention": "bridge"
+          }
+        },
+        "actual": {
+          "intent": "emergency_crash",
+          "triage": "P1",
+          "slots": {
+            "CASUALTY_COUNT": 2,
+            "ENTRAPMENT": false,
+            "HAZARD_TYPE": "fire",
+            "CHILD_INVOLVED": true,
+            "LOCATION": "bridge"
+          },
+          "follow_up_question": null,
+          "status_code": 200
+        },
+        "failure_reason": "intent_mismatch"
+      }
+    ]
+  },
+  "overall": {
+    "total_messages": 75,
+    "total_passed": 24,
+    "overall_pass_rate": 0.32
+  }
+}

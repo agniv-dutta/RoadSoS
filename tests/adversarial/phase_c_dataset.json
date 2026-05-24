@@ -1,0 +1,227 @@
+[
+  {
+    "id": "C-001",
+    "text": "Highway එකේ ලොකු accident එකක් වෙලා, 3 injured. ඉක්මනට එන්න.",
+    "language": "si",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 3, "entrapment": false, "hazard_type": "none", "child_involved": false, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-002",
+    "text": "Fire එකක් bus එකේ! 5 injured, bridge ළඟ, please help",
+    "language": "si",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 5, "entrapment": false, "hazard_type": "fire", "child_involved": false, "location_mention": "bridge"},
+    "phase": "C"
+  },
+  {
+    "id": "C-003",
+    "text": "รถชน highway, 2 people trapped ในรถ, petrol leak ด้วย",
+    "language": "th",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 2, "entrapment": true, "hazard_type": "fuel_leak", "child_involved": false, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-004",
+    "text": "accident হয়েছে NH12 তে, 7 জন hurt, fire লেগেছে",
+    "language": "bn",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 7, "entrapment": false, "hazard_type": "fire", "child_involved": false, "location_mention": "NH12"},
+    "phase": "C"
+  },
+  {
+    "id": "C-005",
+    "text": "दुर्घटना on expressway, 4 लोग फंसे, ambulance जल्दी",
+    "language": "hi",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 4, "entrapment": true, "hazard_type": "none", "child_involved": false, "location_mention": "expressway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-006",
+    "text": "火災 নয় but fire in truck, 1 জন trapped, highway",
+    "language": "bn",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 1, "entrapment": true, "hazard_type": "fire", "child_involved": false, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-007",
+    "text": "Bus crash වෙලා, children inside, 6 injured, NH7",
+    "language": "si",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 6, "entrapment": false, "hazard_type": "none", "child_involved": true, "location_mention": "NH7"},
+    "phase": "C"
+  },
+  {
+    "id": "C-008",
+    "text": "road side accident, 3 คนเจ็บ, help asap",
+    "language": "th",
+    "expected_intent": "medical_emergency",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 3, "entrapment": false, "hazard_type": "none", "child_involved": false, "location_mention": "road side"},
+    "phase": "C"
+  },
+  {
+    "id": "C-009",
+    "text": "truck came off bridge, 2 people injured, ගිනි smoke",
+    "language": "si",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 2, "entrapment": false, "hazard_type": "fire", "child_involved": false, "location_mention": "bridge"},
+    "phase": "C"
+  },
+  {
+    "id": "C-010",
+    "text": "হাইওয়েতে accident, 5 injured, बच्चों को help करें",
+    "language": "bn",
+    "expected_intent": "medical_emergency",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 5, "entrapment": false, "hazard_type": "none", "child_involved": true, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-011",
+    "text": "ช่วยด่วย accident on highway, 3 injured, fire มาแล้ว",
+    "language": "th",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 3, "entrapment": false, "hazard_type": "fire", "child_involved": false, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-012",
+    "text": "accident হয়েছে, 2 people stuck in car, NH34",
+    "language": "bn",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 2, "entrapment": true, "hazard_type": "none", "child_involved": false, "location_mention": "NH34"},
+    "phase": "C"
+  },
+  {
+    "id": "C-013",
+    "text": "รถชนแรงมาก on bridge, 4 คนเจ็บ, kids inside",
+    "language": "th",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 4, "entrapment": false, "hazard_type": "none", "child_involved": true, "location_mention": "bridge"},
+    "phase": "C"
+  },
+  {
+    "id": "C-014",
+    "text": "road crash, 1 জন trapped, fire, expressway",
+    "language": "bn",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 1, "entrapment": true, "hazard_type": "fire", "child_involved": false, "location_mention": "expressway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-015",
+    "text": "emergency! 8 लोग injured at highway, ambulance now",
+    "language": "hi",
+    "expected_intent": "medical_emergency",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 8, "entrapment": false, "hazard_type": "none", "child_involved": false, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-016",
+    "text": "gari accident, 2 জন injured, fire smoke, bridge",
+    "language": "bn",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 2, "entrapment": false, "hazard_type": "fire", "child_involved": false, "location_mention": "bridge"},
+    "phase": "C"
+  },
+  {
+    "id": "C-017",
+    "text": "fire on bus, 4 คนติดอยู่, highway",
+    "language": "th",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 4, "entrapment": true, "hazard_type": "fire", "child_involved": false, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-018",
+    "text": "3 people আহত, accident on NH2, please come দ্রুত",
+    "language": "bn",
+    "expected_intent": "medical_emergency",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 3, "entrapment": false, "hazard_type": "none", "child_involved": false, "location_mention": "NH2"},
+    "phase": "C"
+  },
+  {
+    "id": "C-019",
+    "text": "school bus दुर्घटना, children inside, 5 injured, road side",
+    "language": "hi",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 5, "entrapment": false, "hazard_type": "none", "child_involved": true, "location_mention": "road side"},
+    "phase": "C"
+  },
+  {
+    "id": "C-020",
+    "text": "Highway එකේ accident වෙලා, 2 injured, petrol leak",
+    "language": "si",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 2, "entrapment": false, "hazard_type": "fuel_leak", "child_involved": false, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-021",
+    "text": "crash near bridge, 3 คน trapped, ambulance please",
+    "language": "th",
+    "expected_intent": "emergency_crash",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 3, "entrapment": true, "hazard_type": "none", "child_involved": false, "location_mention": "bridge"},
+    "phase": "C"
+  },
+  {
+    "id": "C-022",
+    "text": "accident হইছে, 4 लोग injured, highway, fire",
+    "language": "bn",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 4, "entrapment": false, "hazard_type": "fire", "child_involved": false, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-023",
+    "text": "รถชน highway, 2 people, children inside, smoke",
+    "language": "th",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 2, "entrapment": false, "hazard_type": "fire", "child_involved": true, "location_mention": "highway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-024",
+    "text": "expressway দুর্ঘটনা, 6 আহত, help now",
+    "language": "bn",
+    "expected_intent": "medical_emergency",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 6, "entrapment": false, "hazard_type": "none", "child_involved": false, "location_mention": "expressway"},
+    "phase": "C"
+  },
+  {
+    "id": "C-025",
+    "text": "bridge එක ළඟ truck crash, 2 injured, fire, child in van",
+    "language": "si",
+    "expected_intent": "fire_hazard",
+    "expected_triage": "P1",
+    "expected_slots": {"casualties": 2, "entrapment": false, "hazard_type": "fire", "child_involved": true, "location_mention": "bridge"},
+    "phase": "C"
+  }
+]

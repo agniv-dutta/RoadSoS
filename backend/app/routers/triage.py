@@ -8,12 +8,14 @@ with extracted slots, triage level, and follow-up question.
 
 import uuid
 from datetime import datetime, timezone
+from time import perf_counter
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel, Field
 
 from app.nlu.pipeline import run_nlu_pipeline
 from app.nlu.cap_exporter import CAPv12Exporter
+from app.nlu.latency_benchmark import run_latency_benchmark
 from app.dialogue.state_machine import TriageStateMachine
 from app.nlu.slots import (
     TRIAGE_TO_CAP_SEVERITY,
@@ -62,6 +64,7 @@ class TriageResponse(BaseModel):
     triage_level:     str
     intent:           str
     confidence:       float
+    runtime_mode:     str | None = None
     follow_up:        str | None
     missing_slots:    list[str]
     info:             CAPInfo
@@ -99,6 +102,7 @@ def _build_cap_response(message: str, nlu: dict) -> TriageResponse:
         triage_level  = triage_level.value,
         intent        = intent,
         confidence    = nlu["confidence"],
+        runtime_mode  = nlu.get("runtime_mode"),
         follow_up     = nlu["follow_up_question"],
         missing_slots = nlu["missing_slots"],
         info          = CAPInfo(
@@ -173,6 +177,7 @@ async def triage_message(req: TriageRequest):
     out["turn"] = 1
     out["follow_up_question"] = result.get("follow_up_question")
     out["session_state"] = result.get("state")
+    out["runtime_mode"] = nlu_result.get("runtime_mode")
     return out
 
 
@@ -181,8 +186,8 @@ async def triage_health():
     """Warmup check — loads the classifier if not already loaded."""
     from app.nlu.pipeline import load_classifier
     try:
-        load_classifier()
-        return {"status": "ok", "model": "facebook/bart-large-mnli"}
+        engine = load_classifier()
+        return {"status": "ok", "model": "onnx_int8" if getattr(engine, "available", False) else "fallback"}
     except Exception as e:
         raise HTTPException(status_code=503, detail=str(e))
 
@@ -206,6 +211,18 @@ async def triage_batch(messages: list[str]):
     return results
 
 
+@router.get("/triage/latency", summary="Run the latency benchmark and return a JSON report")
+async def triage_latency(sample_count: int = 200):
+    if sample_count < 1 or sample_count > 1000:
+        raise HTTPException(status_code=400, detail="sample_count must be between 1 and 1000")
+    try:
+        return run_latency_benchmark(sample_count=sample_count)
+    except AssertionError as exc:
+        raise HTTPException(status_code=503, detail=str(exc))
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
 class ParseMessageRequest(BaseModel):
     text: str
     session_id: str | None = None
@@ -213,7 +230,8 @@ class ParseMessageRequest(BaseModel):
 
 
 @router.post("/triage/parse-message", summary="Session-aware parse message for dialogue slot collection")
-async def parse_message(req: ParseMessageRequest):
+async def parse_message(req: ParseMessageRequest, response: Response):
+    started = perf_counter()
     # session management via app.state.session_store
     from fastapi import Request
     # create or fetch session store from app state
@@ -230,4 +248,5 @@ async def parse_message(req: ParseMessageRequest):
 
     session_id = req.session_id or str(uuid.uuid4())
     result = sm.process_turn(session_id=session_id, message=req.text, language_hint=req.language_hint)
+    response.headers["X-Latency-Ms"] = f"{(perf_counter() - started) * 1000.0:.2f}"
     return result

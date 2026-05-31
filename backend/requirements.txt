@@ -8,11 +8,11 @@ python-multipart==0.0.9
 requests==2.32.3
 
 # NLU — zero-shot baseline 
-transformers==4.41.2
+transformers==4.39.3
 torch==2.12.0
 numpy
 onnx==1.16.0
-onnxruntime==1.18.0
+onnxruntime==1.20.0
 optimum[onnxruntime]==1.19.0
 seqeval==1.2.2
 torchcrf==1.1.0

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useSosStore } from '../store/useSosStore';
@@ -9,8 +9,126 @@ import {
   Radio, Wifi, WifiOff, Bell, Settings, Search, MapPin, 
   Flame, Shield, Truck, Cross, ChevronRight, Share, Navigation,
   CloudLightning, AlertCircle, Info, ShieldAlert, HeartHandshake,
-  Activity, Users, FileText
+  Activity, Users, FileText, ChevronDown, CheckCircle2
 } from 'lucide-react';
+
+const DISTRESS_KEYWORDS = [
+  'help',
+  'accident',
+  'emergency',
+  'urgent',
+  'fire',
+  'ambulance',
+  'crash',
+  'bleeding',
+  'injured',
+  'stuck',
+  'sos',
+  'panic',
+  'bachao',
+  'madad',
+  'bachaoo',
+];
+
+function looksLikeEmergencyMessage(text) {
+  const normalized = String(text || '').trim().toLowerCase();
+  if (!normalized) {
+    return false;
+  }
+
+  const words = normalized.split(/\s+/);
+  if (words.length <= 4) {
+    return false;
+  }
+
+  return DISTRESS_KEYWORDS.some((keyword) => normalized.startsWith(keyword));
+}
+
+function parseLocationSlot(slots) {
+  const locationText =
+    slots?.LOCATION ||
+    slots?.location ||
+    slots?.location_mention ||
+    null;
+
+  if (!locationText || typeof locationText !== 'string') {
+    return null;
+  }
+
+  const match = locationText.match(/(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/);
+  if (!match) {
+    return null;
+  }
+
+  const lat = Number(match[1]);
+  const lng = Number(match[2]);
+  if (Number.isNaN(lat) || Number.isNaN(lng)) {
+    return null;
+  }
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+    return null;
+  }
+
+  return { lat, lng };
+}
+
+function getLastUpdatedMeta(lastSynced) {
+  if (!lastSynced) {
+    return {
+      label: 'Updated unknown',
+      toneClass: 'text-danger',
+      warning: 'Data may be outdated.',
+      staleLevel: 'very-stale',
+    };
+  }
+
+  const now = Date.now();
+  const syncedMs = new Date(lastSynced).getTime();
+  const ageHours = Math.max(0, (now - syncedMs) / (1000 * 60 * 60));
+  const ageMinutes = Math.max(0, Math.floor((now - syncedMs) / (1000 * 60)));
+
+  let label = 'Updated just now';
+  if (ageMinutes >= 60) {
+    const hours = Math.floor(ageMinutes / 60);
+    label = `Updated ${hours}h ago`;
+  } else if (ageMinutes >= 1) {
+    label = `Updated ${ageMinutes}m ago`;
+  }
+
+  if (ageHours > 72) {
+    return {
+      label,
+      toneClass: 'text-danger',
+      warning: 'Data may be outdated.',
+      staleLevel: 'very-stale',
+    };
+  }
+  if (ageHours > 24) {
+    return {
+      label,
+      toneClass: 'text-primary',
+      warning: null,
+      staleLevel: 'stale',
+    };
+  }
+
+  return {
+    label,
+    toneClass: 'text-textSecondary',
+    warning: null,
+    staleLevel: 'fresh',
+  };
+}
+
+function confidenceTone(confidence) {
+  if (confidence >= 0.85) {
+    return 'bg-safe';
+  }
+  if (confidence >= 0.6) {
+    return 'bg-primary';
+  }
+  return 'bg-danger';
+}
 
 // Custom Map center controller helper
 function MapController({ center, zoom }) {
@@ -25,24 +143,28 @@ function MapController({ center, zoom }) {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { id } = useParams(); // For Screen 4 PlaceDetail routing
   
   const { 
     userLocation, setUserLocation,
     onlineStatus, setOnlineStatus,
-    sosActive, setSosActive,
+    setSosActive, startSos,
     nearbyPlaces, setNearbyPlaces,
     selectedPlace, setSelectedPlace,
-    toast, setToast,
-    offlineIncidents, loadOfflineCache
+    setToast,
+    offlineIncidents, loadOfflineCache,
+    sessionId, setTriageSessionId, setTriageResult, addTriageMessage
   } = useSosStore();
 
   const [activeTab, setActiveTab] = useState('dispatch'); // 'dispatch', 'telemetry', 'fleet', 'history'
   const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'hospital', 'police'
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchPlaceholder, setSearchPlaceholder] = useState('CMD: Search Dispatch Grid...');
   const [mapZoom, setMapZoom] = useState(13);
   const [isHoldingSos, setIsHoldingSos] = useState(false);
+  const [triageResult, setLocalTriageResult] = useState(null);
+  const [triageLoading, setTriageLoading] = useState(false);
+  const [capExpanded, setCapExpanded] = useState(false);
   const holdTimerRef = useRef(null);
 
   // Set Title on Mount
@@ -86,26 +208,6 @@ export default function Dashboard() {
     }
   }, [id, nearbyPlaces, setSelectedPlace]);
 
-  // Handle network online/offline listeners
-  useEffect(() => {
-    const handleOnline = () => {
-      setOnlineStatus(true);
-      setToast("Connection restored — synchronizing command grid", "success");
-    };
-    const handleOffline = () => {
-      setOnlineStatus(false);
-      setToast("Backend unavailable — operating in offline mode", "error");
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, [setOnlineStatus, setToast]);
-
   // Geolocation tracker
   const handleShareLocation = () => {
     if (navigator.geolocation) {
@@ -137,6 +239,54 @@ export default function Dashboard() {
     setIsHoldingSos(false);
     if (holdTimerRef.current) {
       clearTimeout(holdTimerRef.current);
+    }
+  };
+
+  const handleCommandSubmit = async () => {
+    const text = searchQuery.trim();
+    if (!text || !onlineStatus) {
+      return;
+    }
+
+    const shouldRouteToTriage = looksLikeEmergencyMessage(text) || Boolean(sessionId);
+    if (!shouldRouteToTriage) {
+      return;
+    }
+
+    setTriageLoading(true);
+    try {
+      const parsed = await api.parseTriageMessage(text, sessionId || null, null);
+      const normalized = {
+        intent: parsed.intent || 'unknown',
+        triage: parsed.triage_result || parsed.triage || parsed.triage_level || 'P3',
+        slots: parsed.filled_slots || parsed.slots || {},
+        cap_alert: parsed.cap_alert || null,
+        session_id: parsed.session_id || null,
+        follow_up_question: parsed.follow_up_question || null,
+      };
+
+      setLocalTriageResult(normalized);
+      setTriageResult(normalized);
+      addTriageMessage({ role: 'user', text, timestamp: Date.now() });
+      if (normalized.session_id) {
+        setTriageSessionId(normalized.session_id);
+      }
+      if (normalized.follow_up_question) {
+        setSearchPlaceholder(normalized.follow_up_question);
+      } else {
+        setSearchPlaceholder('CMD: Search Dispatch Grid...');
+      }
+
+      const prefilledLocation = parseLocationSlot(normalized.slots);
+      if (normalized.triage === 'P1') {
+        startSos(normalized.session_id || null, prefilledLocation);
+      }
+
+      setSearchQuery('');
+    } catch (error) {
+      setToast(error.message || 'Failed to parse triage message', 'error');
+    } finally {
+      setTriageLoading(false);
     }
   };
 
@@ -328,7 +478,13 @@ export default function Dashboard() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="CMD: Search Dispatch Grid..."
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleCommandSubmit();
+                      }
+                    }}
+                    placeholder={searchPlaceholder}
                     disabled={!onlineStatus}
                     title={!onlineStatus ? "Unavailable offline" : ""}
                     className={`w-full h-10 pl-9 pr-4 bg-white/3 border border-white/10 rounded-[8px] text-xs font-mono placeholder:text-textTertiary text-white focus:outline-none focus:border-primary focus:shadow-[0_0_8px_rgba(232,160,32,0.25)] transition-all ${
@@ -336,6 +492,72 @@ export default function Dashboard() {
                     }`}
                   />
                 </div>
+                {triageLoading && (
+                  <div className="text-[10px] font-mono text-primary tracking-wider">ANALYZING EMERGENCY MESSAGE...</div>
+                )}
+                {triageResult && (
+                  <div className="glass-panel rounded-[8px] p-3 border border-primary/20 text-left">
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="font-mono text-[10px] tracking-widest text-primary">INTENT: {String(triageResult.intent).toUpperCase()}</span>
+                      <span className={`px-2 py-0.5 rounded-pill text-[9px] font-mono tracking-widest border ${
+                        triageResult.triage === 'P1'
+                          ? 'text-danger border-danger/40'
+                          : triageResult.triage === 'P2'
+                          ? 'text-primary border-primary/40'
+                          : 'text-safe border-safe/40'
+                      }`}>
+                        {triageResult.triage}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {Object.entries(triageResult.slots || {}).length ? Object.entries(triageResult.slots || {}).map(([key, value]) => (
+                        <span key={key} className="px-2 py-0.5 rounded-pill text-[9px] font-mono border border-white/10 text-textSecondary">
+                          {key}: {String(value)}
+                        </span>
+                      )) : (
+                        <span className="text-[10px] font-mono text-textTertiary">No slots extracted yet.</span>
+                      )}
+                    </div>
+
+                    {triageResult.follow_up_question && (
+                      <div className="mb-2 text-[10px] font-mono text-info">
+                        FOLLOW-UP: {triageResult.follow_up_question}
+                      </div>
+                    )}
+
+                    {triageResult.cap_alert && (
+                      <div className="border border-white/10 rounded-[8px] overflow-hidden">
+                        <button
+                          onClick={() => setCapExpanded((value) => !value)}
+                          className="w-full px-2.5 py-2 flex items-center justify-between text-[10px] font-mono tracking-wider text-white/90 bg-white/5"
+                        >
+                          <span>CAP v1.2 Standard Alert - International Emergency Protocol</span>
+                          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${capExpanded ? 'rotate-180' : ''}`} />
+                        </button>
+                        {capExpanded && triageResult.triage === 'P1' && (
+                          <div className="p-2 text-[9px] leading-relaxed max-h-52 overflow-auto text-textSecondary bg-black/40 space-y-1.5">
+                            <div className="text-primary">identifier: {triageResult.cap_alert.identifier}</div>
+                            <div>sender: {triageResult.cap_alert.sender}</div>
+                            <div>sent: {triageResult.cap_alert.sent}</div>
+                            <div>status: {triageResult.cap_alert.status}</div>
+                            <div>msgType: {triageResult.cap_alert.msgType}</div>
+                            <div>scope: {triageResult.cap_alert.scope}</div>
+                            <div className="text-white/80">info.event: {triageResult.cap_alert.info?.[0]?.event}</div>
+                            <div>info.urgency: {triageResult.cap_alert.info?.[0]?.urgency}</div>
+                            <div>info.severity: {triageResult.cap_alert.info?.[0]?.severity}</div>
+                            <div>info.certainty: {triageResult.cap_alert.info?.[0]?.certainty}</div>
+                            <div>description: {triageResult.cap_alert.info?.[0]?.description}</div>
+                            <div className="pt-1 text-textTertiary">slots: {JSON.stringify(triageResult.slots || {})}</div>
+                          </div>
+                        )}
+                        {capExpanded && triageResult.triage !== 'P1' && (
+                          <pre className="p-2 text-[9px] leading-relaxed max-h-44 overflow-auto text-textSecondary bg-black/40">{JSON.stringify(triageResult.cap_alert, null, 2)}</pre>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Panel Header */}
@@ -410,29 +632,64 @@ export default function Dashboard() {
                       }
 
                       const distanceVal = place.distance_km ? `${place.distance_km.toFixed(1)} KM` : '0.0 KM';
+                      const updatedMeta = getLastUpdatedMeta(place.last_synced);
+                      const confidenceValue = Math.max(0, Math.min(1, Number(place.data_confidence ?? 0.4)));
 
                       return (
                         <div 
                           key={place.id}
                           onClick={() => navigate(`/dashboard/place/${place.id}`)}
-                          className="glass-panel p-3.5 rounded-[8px] flex items-center justify-between border border-white/5 hover:border-primary/20 hover:shadow-[0_0_8px_rgba(232,160,32,0.1)] transition-all cursor-pointer group"
+                          className="glass-panel p-3.5 rounded-[8px] border border-white/5 hover:border-primary/20 hover:shadow-[0_0_8px_rgba(232,160,32,0.1)] transition-all cursor-pointer group"
                         >
-                          <div className="flex items-center gap-3 text-left overflow-hidden">
-                            <div className={`p-2.5 rounded-[8px] bg-white/3 border border-white/5 flex-shrink-0 group-hover:scale-105 transition-transform ${iconColorClass}`}>
-                              <IconComponent className="w-4 h-4" />
-                            </div>
-                            <div className="truncate">
-                              <h3 className="font-space font-semibold text-sm text-white truncate leading-snug">
-                                {place.name.toUpperCase()}
-                              </h3>
-                              <div className="font-mono text-[9px] mt-0.5 tracking-wider">
-                                STATUS: <span className={statusColorClass}>{statusText}</span>
+                          <div className="flex items-center justify-between gap-3 text-left overflow-hidden">
+                            <div className="flex items-center gap-3 text-left overflow-hidden">
+                              <div className={`p-2.5 rounded-[8px] bg-white/3 border border-white/5 flex-shrink-0 group-hover:scale-105 transition-transform ${iconColorClass}`}>
+                                <IconComponent className="w-4 h-4" />
+                              </div>
+                              <div className="truncate">
+                                <h3 className="font-space font-semibold text-sm text-white truncate leading-snug">
+                                  {place.name.toUpperCase()}
+                                </h3>
+                                <div className="font-mono text-[9px] mt-0.5 tracking-wider">
+                                  STATUS: <span className={statusColorClass}>{statusText}</span>
+                                </div>
                               </div>
                             </div>
+                            <div className="text-right pl-2">
+                              <div className="font-mono text-[10px] text-primary font-bold flex-shrink-0">{distanceVal}</div>
+                              <div className={`font-mono text-[9px] ${updatedMeta.toneClass}`}>{updatedMeta.label}</div>
+                            </div>
                           </div>
-                          
-                          <div className="font-mono text-[10px] text-primary font-bold flex-shrink-0 pl-2">
-                            {distanceVal}
+
+                          <div className="mt-2 flex items-center justify-between gap-2 text-[9px] font-mono">
+                            {place.is_verified ? (
+                              <div className="flex items-center gap-1 text-primary" title="Data verified by RoadSoS intelligence network">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>VERIFIED</span>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-1 text-primary" title="Community data - verify before calling.">
+                                <AlertCircle className="w-3.5 h-3.5" />
+                                <span>COMMUNITY DATA</span>
+                              </div>
+                            )}
+                            <span className="text-textTertiary">Confidence {(confidenceValue * 100).toFixed(0)}%</span>
+                          </div>
+
+                          {updatedMeta.warning && (
+                            <div className="mt-1 text-[9px] font-mono text-danger">{updatedMeta.warning}</div>
+                          )}
+
+                          <div className="mt-2 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                            <div
+                              className={`h-full ${confidenceTone(confidenceValue)}`}
+                              style={{ width: `${confidenceValue * 100}%` }}
+                            />
+                          </div>
+                          <div className="mt-1 text-[9px] font-mono text-textSecondary">
+                            {place.is_verified
+                              ? 'Data verified by RoadSoS intelligence network'
+                              : 'Community data - verify before calling.'}
                           </div>
                         </div>
                       );

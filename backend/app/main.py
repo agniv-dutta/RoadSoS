@@ -12,6 +12,7 @@ from app.routers.nearby  import router as nearby_router
 from app.routers.sos     import router as sos_router
 from app.routers.health  import router as health_router
 from app.routers.admin   import router as admin_router
+from app.routers.feedback import router as feedback_router
 from app.config import get_settings
 from app.dialogue.session_store import SessionStore
 from app.nlu.pipeline import load_classifier
@@ -67,7 +68,11 @@ app.include_router(triage_router)
 app.include_router(nearby_router, prefix="/api")
 app.include_router(sos_router, prefix="/api")
 app.include_router(health_router)
+app.include_router(health_router, prefix="/api")
 app.include_router(admin_router)
+app.include_router(admin_router, prefix="/api")
+app.include_router(feedback_router)
+app.include_router(feedback_router, prefix="/api")
 
 
 @app.get("/")
@@ -78,8 +83,8 @@ async def root():
         "docs": "/docs",
         "endpoints": {
             "triage":  "POST /api/triage",
-            "nearby":  "GET  /nearby",
-            "sos":     "POST /sos",
-            "health":  "GET  /health",
+            "nearby":  "GET  /api/nearby",
+            "sos":     "POST /api/sos",
+            "health":  "GET  /api/health",
         },
     }

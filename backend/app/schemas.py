@@ -27,6 +27,7 @@ class PlaceResponse(BaseModel):
     is_verified: bool
     geohash5: str
     source: str
+    data_confidence: float = Field(ge=0.0, le=1.0)
     last_synced: datetime
     created_at: datetime
     distance_km: float | None = None
@@ -83,3 +84,19 @@ class HealthResponse(BaseModel):
     status: str
     db: str
     version: str
+
+
+class FeedbackRequest(BaseModel):
+    """Feedback submission for incorrect place information."""
+
+    place_id: int | None = None
+    issue: str = Field(min_length=3, max_length=512)
+    correct_value: str | None = Field(default=None, max_length=512)
+
+
+class FeedbackResponse(BaseModel):
+    """Acknowledgement payload for submitted feedback."""
+
+    id: int
+    message: str
+    review_eta: str

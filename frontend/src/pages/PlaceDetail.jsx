@@ -10,6 +10,10 @@ export default function PlaceDetail({ inline = false }) {
   const { userLocation, setToast } = useSosStore();
   const [place, setPlace] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [feedbackIssue, setFeedbackIssue] = useState('');
+  const [feedbackCorrectValue, setFeedbackCorrectValue] = useState('');
+  const [submittingFeedback, setSubmittingFeedback] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -44,6 +48,26 @@ export default function PlaceDetail({ inline = false }) {
     if (!place) return;
     const url = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${place.latitude},${place.longitude}`;
     window.open(url, '_blank');
+  };
+
+  const submitFeedback = async () => {
+    if (!place || !feedbackIssue.trim()) {
+      setToast('Please describe what is incorrect before submitting.', 'info');
+      return;
+    }
+
+    setSubmittingFeedback(true);
+    try {
+      await api.postFeedback(place.id, feedbackIssue.trim(), feedbackCorrectValue.trim() || null);
+      setToast('Thank you - reviewed within 24h.', 'success');
+      setFeedbackIssue('');
+      setFeedbackCorrectValue('');
+      setShowFeedbackForm(false);
+    } catch (error) {
+      setToast(error.message || 'Unable to submit feedback right now.', 'error');
+    } finally {
+      setSubmittingFeedback(false);
+    }
   };
 
   if (loading) {
@@ -231,13 +255,46 @@ export default function PlaceDetail({ inline = false }) {
           </button>
         </div>
 
-        <button 
-          onClick={() => setToast('Incorrect details reported. Dispatch network notified.', 'success')}
-          className="mt-2 text-danger hover:underline text-[10px] font-mono text-center flex items-center justify-center gap-1"
-        >
-          <AlertCircle className="w-3 h-3" />
-          ⊙ REPORT INCORRECT INFO
-        </button>
+        {!showFeedbackForm ? (
+          <button 
+            onClick={() => setShowFeedbackForm(true)}
+            className="mt-2 text-danger hover:underline text-[10px] font-mono text-center flex items-center justify-center gap-1"
+          >
+            <AlertCircle className="w-3 h-3" />
+            REPORT INCORRECT INFO
+          </button>
+        ) : (
+          <div className="mt-2 border border-white/10 rounded-[8px] p-3 bg-white/3 space-y-2">
+            <div className="text-[10px] font-mono text-primary tracking-wider">REPORT DATA ISSUE</div>
+            <textarea
+              value={feedbackIssue}
+              onChange={(event) => setFeedbackIssue(event.target.value)}
+              placeholder="What is wrong?"
+              className="w-full min-h-20 px-2.5 py-2 bg-black/50 border border-white/10 rounded text-xs font-mono text-white placeholder:text-textTertiary focus:outline-none focus:border-primary"
+            />
+            <input
+              value={feedbackCorrectValue}
+              onChange={(event) => setFeedbackCorrectValue(event.target.value)}
+              placeholder="Correct value"
+              className="w-full h-9 px-2.5 bg-black/50 border border-white/10 rounded text-xs font-mono text-white placeholder:text-textTertiary focus:outline-none focus:border-primary"
+            />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={submitFeedback}
+                disabled={submittingFeedback}
+                className="flex-1 h-9 bg-primary text-black font-mono text-[10px] tracking-wider rounded hover:bg-primary/90 disabled:opacity-60"
+              >
+                {submittingFeedback ? 'SUBMITTING...' : 'SUBMIT REPORT'}
+              </button>
+              <button
+                onClick={() => setShowFeedbackForm(false)}
+                className="flex-1 h-9 border border-white/20 text-textSecondary font-mono text-[10px] tracking-wider rounded hover:text-white"
+              >
+                CANCEL
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

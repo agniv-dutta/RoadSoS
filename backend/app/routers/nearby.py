@@ -7,7 +7,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..database import get_db
-from ..models import Place
+from ..models import Place, compute_data_confidence
 from ..schemas import Center, NearbyResponse, PlaceResponse
 from ..utils.haversine import bounding_box, haversine
 
@@ -35,6 +35,11 @@ def _place_to_response(place: Place, distance_km: float | None = None) -> PlaceR
         is_verified=place.is_verified,
         geohash5=place.geohash5,
         source=place.source,
+        data_confidence=compute_data_confidence(
+            is_verified=place.is_verified,
+            source=place.source,
+            last_synced=place.last_synced,
+        ),
         last_synced=place.last_synced,
         created_at=place.created_at,
         distance_km=distance_km,

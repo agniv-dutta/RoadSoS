@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      GOOGLE_PLACES_API_KEY: ${GOOGLE_PLACES_API_KEY}
+      ADMIN_SECRET_KEY: ${ADMIN_SECRET_KEY}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_FROM_NUMBER: ${TWILIO_FROM_NUMBER}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    volumes:
+      - ./backend/app/nlu/checkpoints:/app/nlu/checkpoints
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://backend:8000
+    environment:
+      VITE_API_URL: http://backend:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy

@@ -2,10 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSosStore } from '../store/useSosStore';
 import { api } from '../api/client';
 import { X, Send, Share2, ShieldAlert } from 'lucide-react';
+import { getLocation } from '../utils/geo';
+import { saveSosLog } from '../utils/offlineCache';
 
 export default function SosModal() {
-  const { sosActive, setSosActive, userLocation, setUserLocation, setToast } = useSosStore();
-  const [countdown, setCountdown] = useState(5);
+  const {
+    sosActive,
+    setSosActive,
+    userLocation,
+    setUserLocation,
+    setToast,
+    sosPrefillLocation,
+    countdown,
+    setCountdown,
+    completeSos,
+    cancelSos,
+  } = useSosStore();
   const [coords, setCoords] = useState(userLocation);
   const [googleMapsUrl, setGoogleMapsUrl] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -33,24 +45,26 @@ export default function SosModal() {
     setIsSent(false);
     setIsSending(false);
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCoords({ lat: latitude, lng: longitude });
-          setUserLocation(latitude, longitude);
-        },
-        (error) => {
-          console.warn("Geolocation lookup failed: ", error.message);
-          // Keep store location
-          setCoords(userLocation);
-        },
-        { enableHighAccuracy: true, timeout: 5000 }
-      );
-    } else {
+    if (sosPrefillLocation?.lat != null && sosPrefillLocation?.lng != null) {
+      setCoords(sosPrefillLocation);
+      setUserLocation(sosPrefillLocation.lat, sosPrefillLocation.lng);
+      return;
+    }
+
+    getLocation()
+      .then((location) => {
+        setCoords(location);
+        setUserLocation(location.lat, location.lng);
+      })
+      .catch(() => {
+        // Keep store location when geolocation cannot refresh.
+        setCoords(userLocation);
+      });
+
+    if (!navigator.geolocation) {
       setCoords(userLocation);
     }
-  }, [sosActive, userLocation, setUserLocation]);
+  }, [sosActive, userLocation, setUserLocation, setCountdown, sosPrefillLocation]);
 
   // Update Google Maps URL whenever coords change
   useEffect(() => {
@@ -77,12 +91,15 @@ export default function SosModal() {
     if (isSending || isSent) return;
     setIsSending(true);
     try {
-      const data = await api.sendSos(coords.lat, coords.lng);
+      const data = await api.sendSos(coords.lat, coords.lng, null);
+      completeSos({ smsSent: data.sms_sent, sosSessionId: data.sos_id ? String(data.sos_id) : null });
       setIsSent(true);
       setToast('SOS Alert Sent Successfully!', 'success');
       console.log('SOS response:', data);
-    } catch (err) {
-      setToast('SOS Alert failed to send - operating in offline backup mode', 'error');
+    } catch {
+      saveSosLog({ latitude: coords.lat, longitude: coords.lng, phone: null });
+      completeSos({ smsSent: false, sosSessionId: null });
+      setToast('SOS queued offline and will sync when internet returns', 'error');
       setIsSent(true); // Treat as completed fallback
     } finally {
       setIsSending(false);
@@ -121,7 +138,7 @@ export default function SosModal() {
             <span className="font-bebas text-lg tracking-wider">EMERGENCY ALERT TRIGGERED</span>
           </div>
           <button 
-            onClick={() => setSosActive(false)}
+            onClick={cancelSos}
             className="text-white/80 hover:text-white transition-colors"
             aria-label="Close modal"
           >
@@ -214,7 +231,7 @@ export default function SosModal() {
 
             <button
               onClick={() => {
-                setSosActive(false);
+                cancelSos();
                 setToast('SOS Alert Cancelled', 'info');
               }}
               className="w-full py-2 bg-transparent hover:bg-white/5 border border-white/20 text-neutral-400 hover:text-white text-xs font-body tracking-wider rounded-pill transition-colors"

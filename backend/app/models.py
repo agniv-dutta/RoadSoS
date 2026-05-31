@@ -10,6 +10,23 @@ class Base(DeclarativeBase):
     """Base class for all ORM models."""
 
 
+def compute_data_confidence(*, is_verified: bool, source: str, last_synced: datetime | None) -> float:
+    """Compute trust score for a place record based on source and freshness."""
+
+    if is_verified:
+        return 1.0
+
+    source_key = (source or "").strip().lower()
+    if source_key in {"google_places", "google"}:
+        if last_synced is None:
+            return 0.4
+        synced_age = datetime.now(timezone.utc) - last_synced
+        return 0.85 if synced_age.total_seconds() <= 7 * 24 * 3600 else 0.6
+    if source_key in {"osm", "openstreetmap"}:
+        return 0.6
+    return 0.4
+
+
 class Place(Base):
     """Cached roadside assistance place record."""
 
@@ -46,3 +63,15 @@ class SOSLog(Base):
     whatsapp_sent: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     nearest_hospital_id: Mapped[int | None] = mapped_column(ForeignKey("places.id"), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc))
+
+
+class FeedbackReport(Base):
+    """Operator and citizen feedback on place data quality."""
+
+    __tablename__ = "feedback_reports"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    place_id: Mapped[int | None] = mapped_column(ForeignKey("places.id"), nullable=True, index=True)
+    issue: Mapped[str] = mapped_column(String(512), nullable=False)
+    correct_value: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=lambda: datetime.now(timezone.utc), index=True)

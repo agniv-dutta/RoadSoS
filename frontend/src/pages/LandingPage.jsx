@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Radio, Wifi, ShieldAlert, Navigation } from 'lucide-react';
+import { isDemoMode } from '../utils/demoData';
 
 export default function LandingPage() {
+  const location = useLocation();
   const [utcTime, setUtcTime] = useState(new Date().toUTCString());
+  const demoMode = isDemoMode();
 
   // Update clock every second
   useEffect(() => {
@@ -30,6 +33,11 @@ export default function LandingPage() {
           <span className="font-space font-bold text-2xl tracking-[0.2em] text-primary">
             ROADSOS
           </span>
+          {demoMode && (
+            <span className="ml-3 px-2 py-0.5 rounded-pill border border-primary/40 text-primary text-[10px] font-mono tracking-widest">
+              DEMO MODE
+            </span>
+          )}
         </div>
 
         {/* Center content */}
@@ -44,7 +52,7 @@ export default function LandingPage() {
           </p>
 
           <Link 
-            to="/dashboard"
+            to={`/dashboard${location.search || ''}`}
             className="group relative inline-flex items-center justify-center px-10 h-14 bg-primary text-black font-bebas text-xl tracking-wider rounded-pill transition-all duration-300 hover:bg-primary/90 hover:scale-[1.02] shadow-[0_0_15px_rgba(232,160,32,0.3)] hover:shadow-[0_0_25px_rgba(232,160,32,0.6)]"
           >
             OPEN DASHBOARD →

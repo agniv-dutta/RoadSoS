@@ -8,7 +8,6 @@ import { saveSosLog } from '../utils/offlineCache';
 export default function SosModal() {
   const {
     sosActive,
-    setSosActive,
     userLocation,
     setUserLocation,
     setToast,
@@ -23,18 +22,6 @@ export default function SosModal() {
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const timerRef = useRef(null);
-
-  // Keyboard shortcut listener Ctrl+Shift+S
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's') {
-        e.preventDefault();
-        setSosActive(true);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [setSosActive]);
 
   // Geolocation lookup when modal opens
   useEffect(() => {
@@ -65,6 +52,21 @@ export default function SosModal() {
       setCoords(userLocation);
     }
   }, [sosActive, userLocation, setUserLocation, setCountdown, sosPrefillLocation]);
+
+  // Close the modal with Escape.
+  useEffect(() => {
+    if (!sosActive) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        cancelSos();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [sosActive, cancelSos]);
 
   // Update Google Maps URL whenever coords change
   useEffect(() => {

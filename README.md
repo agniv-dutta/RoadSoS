@@ -51,7 +51,7 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 copy .env.example .env
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python run.py
 ```
 
 ## What is implemented (current)
@@ -78,6 +78,16 @@ $env:PYTHONPATH = "backend"
 ```
 
 This repository includes unit tests for the CAP exporter and dialogue FSM, plus integration tests for the triage endpoints. The full suite is green in the development environment used for this work.
+
+## Environment
+
+There are no mandatory third-party free APIs required for local development. The backend works with the default SQLite database and local NLU fallback.
+
+Optional integrations you can enable in `backend/.env`:
+
+- `GOOGLE_PLACES_API_KEY` for live Google Places sync in the admin endpoint.
+- `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_FROM_NUMBER` for outbound SMS.
+- `DATABASE_URL` if you want MySQL instead of the default SQLite file.
 
 ## Docker (optional)
 

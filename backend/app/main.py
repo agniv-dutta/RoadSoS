@@ -13,12 +13,16 @@ from app.routers.sos     import router as sos_router
 from app.routers.health  import router as health_router
 from app.routers.admin   import router as admin_router
 from app.routers.feedback import router as feedback_router
+from app.routers.demo import router as demo_router
 from app.config import get_settings
 from app.dialogue.session_store import SessionStore
 from app.nlu.pipeline import load_classifier
 import asyncio
+import logging
+from statistics import median
 
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -26,7 +30,11 @@ async def lifespan(app: FastAPI):
     # Pre-warm the ONNX-backed NLU engine on startup so first request isn't slow.
     app.state.nlu_engine = load_classifier()
     try:
-        app.state.nlu_engine.warm_up()
+        warm_latencies = app.state.nlu_engine.warm_up()
+        p50_ms = median(warm_latencies) if warm_latencies else 0.0
+        message = f"NLU engine ready (p50: {p50_ms:.1f}ms)"
+        logger.info(message)
+        print(message)
     except Exception:
         pass
     # start session cleanup task
@@ -59,7 +67,13 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -73,6 +87,8 @@ app.include_router(admin_router)
 app.include_router(admin_router, prefix="/api")
 app.include_router(feedback_router)
 app.include_router(feedback_router, prefix="/api")
+app.include_router(demo_router)
+app.include_router(demo_router, prefix="/api")
 
 
 @app.get("/")

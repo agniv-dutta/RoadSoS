@@ -7,6 +7,7 @@ import { Phone, MapPin, CheckCircle2, Database, AlertCircle, ArrowLeft, Navigati
 export default function PlaceDetail({ inline = false }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const currentQuery = typeof window !== 'undefined' ? window.location.search : '';
   const { userLocation, setToast } = useSosStore();
   const [place, setPlace] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -85,7 +86,7 @@ export default function PlaceDetail({ inline = false }) {
         <AlertCircle className="w-8 h-8 text-danger mb-3" />
         <span className="font-mono text-xs tracking-wider text-danger mb-4">PLACE NOT LOCATED</span>
         <button 
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate(`/dashboard${currentQuery}`)}
           className="px-4 py-2 border border-white/20 hover:border-primary text-xs font-mono text-primary rounded-pill transition-colors"
         >
           RETURN TO DISPATCH
@@ -105,7 +106,7 @@ export default function PlaceDetail({ inline = false }) {
         
         {/* Back Link */}
         <button 
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate(`/dashboard${currentQuery}`)}
           className="self-start flex items-center gap-2 text-textSecondary hover:text-primary transition-colors text-xs font-mono"
         >
           <ArrowLeft className="w-4 h-4" />

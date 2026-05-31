@@ -498,7 +498,7 @@ class ONNXInferenceEngine:
             logger.warning("Failed to initialise ONNX NLU engine: %s", exc)
             self.available = False
 
-    def warm_up(self) -> None:
+    def warm_up(self) -> list[float]:
         texts = [
             "accident near road 2 people",
             "fire and smoke near bridge",
@@ -506,11 +506,14 @@ class ONNXInferenceEngine:
             "vehicle breakdown need towing",
             "help me please",
         ]
+        latencies: list[float] = []
         for text in texts:
             try:
-                self.predict(text)
+                result = self.predict(text)
+                latencies.append(float(result.latency_ms))
             except Exception:
                 break
+        return latencies
 
     def predict(self, text: str) -> NLUResult:
         if not text or not text.strip():

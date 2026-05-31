@@ -128,8 +128,12 @@ export function registerConnectivityListeners() {
 
   const handleOnline = async () => {
     const store = useSosStore.getState();
-    store.setOnlineStatus(true);
-    store.setOfflineMode(false);
+    const onlineStatus = await store.syncConnectivityStatus();
+    if (!onlineStatus) {
+      store.setToast('Network is back, but the backend is still unreachable.', 'error');
+      return;
+    }
+
     store.setToast('Connection restored. Syncing pending emergency logs.', 'success');
     const result = await syncPendingLogs();
     if (result.synced > 0) {
@@ -139,9 +143,8 @@ export function registerConnectivityListeners() {
 
   const handleOffline = () => {
     const store = useSosStore.getState();
-    store.setOnlineStatus(false);
     store.setOfflineMode(true);
-    store.setToast('You are offline. Emergency logs will sync on reconnect.', 'error');
+    store.setToast('Network connection dropped. Checking backend reachability in the background.', 'error');
   };
 
   window.addEventListener('online', handleOnline);

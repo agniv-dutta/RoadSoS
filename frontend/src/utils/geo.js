@@ -1,4 +1,5 @@
 import { useSosStore } from '../store';
+import { DEMO_COORDS, isDemoMode } from './demoData';
 
 const BASE32 = '0123456789bcdefghjkmnpqrstuvwxyz';
 
@@ -78,6 +79,12 @@ export function getLocation() {
   const store = useSosStore.getState();
   store.setIsLocating(true);
 
+  if (isDemoMode()) {
+    store.setLocation(DEMO_COORDS.lat, DEMO_COORDS.lng, 5);
+    store.setIsLocating(false);
+    return Promise.resolve({ lat: DEMO_COORDS.lat, lng: DEMO_COORDS.lng });
+  }
+
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       const error = new Error('Geolocation is not supported by this browser');
@@ -115,6 +122,16 @@ export function getLocation() {
 }
 
 export function watchLocation(callback) {
+  if (isDemoMode()) {
+    const store = useSosStore.getState();
+    const next = { lat: DEMO_COORDS.lat, lng: DEMO_COORDS.lng, accuracy: 5 };
+    store.setLocation(next.lat, next.lng, next.accuracy);
+    if (typeof callback === 'function') {
+      callback(next);
+    }
+    return () => {};
+  }
+
   if (!navigator.geolocation) {
     return () => {};
   }

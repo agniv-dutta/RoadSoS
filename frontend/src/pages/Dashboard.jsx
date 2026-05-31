@@ -11,6 +11,7 @@ import {
   CloudLightning, AlertCircle, Info, ShieldAlert, HeartHandshake,
   Activity, Users, FileText, ChevronDown, CheckCircle2
 } from 'lucide-react';
+import { isDemoMode } from '../utils/demoData';
 
 const DISTRESS_KEYWORDS = [
   'help',
@@ -144,14 +145,16 @@ function MapController({ center, zoom }) {
 export default function Dashboard() {
   const navigate = useNavigate();
   const { id } = useParams(); // For Screen 4 PlaceDetail routing
+  const currentQuery = typeof window !== 'undefined' ? window.location.search : '';
   
   const { 
     userLocation, setUserLocation,
     onlineStatus, setOnlineStatus,
-    setSosActive, startSos,
+    startSos,
     nearbyPlaces, setNearbyPlaces,
     selectedPlace, setSelectedPlace,
     setToast,
+    fromCache, setFromCache,
     offlineIncidents, loadOfflineCache,
     sessionId, setTriageSessionId, setTriageResult, addTriageMessage
   } = useSosStore();
@@ -166,6 +169,7 @@ export default function Dashboard() {
   const [triageLoading, setTriageLoading] = useState(false);
   const [capExpanded, setCapExpanded] = useState(false);
   const holdTimerRef = useRef(null);
+  const demoMode = isDemoMode();
 
   // Set Title on Mount
   useEffect(() => {
@@ -184,14 +188,15 @@ export default function Dashboard() {
         const data = await api.getNearby(userLocation.lat, userLocation.lng, 10);
         if (data && data.results) {
           setNearbyPlaces(data.results);
+          setFromCache(Boolean(data.from_cache));
         }
-      } catch (err) {
-        console.error("Failed to load nearby places:", err);
+      } catch {
+        setFromCache(true);
       }
     };
 
     fetchPlaces();
-  }, [userLocation, onlineStatus, setNearbyPlaces, loadOfflineCache]);
+  }, [userLocation, onlineStatus, setNearbyPlaces, loadOfflineCache, setFromCache]);
 
   // Adjust map configurations based on route
   useEffect(() => {
@@ -231,7 +236,7 @@ export default function Dashboard() {
     setIsHoldingSos(true);
     holdTimerRef.current = setTimeout(() => {
       setIsHoldingSos(false);
-      setSosActive(true);
+      startSos();
     }, 1500); // 1.5 second hold to activate
   };
 
@@ -387,6 +392,14 @@ export default function Dashboard() {
               <div className="text-sm text-primary font-bold mt-1">
                 Active Ops: {onlineStatus ? nearbyPlaces.length : '3 (OFFLINE)'}
               </div>
+              <div className="mt-1 flex items-center gap-2">
+                {demoMode && (
+                  <span className="px-2 py-0.5 rounded-pill border border-primary/40 text-primary text-[9px] tracking-widest">DEMO MODE</span>
+                )}
+                {onlineStatus && fromCache && (
+                  <span className="px-2 py-0.5 rounded-pill border border-white/20 text-textSecondary text-[9px] tracking-widest">CACHED</span>
+                )}
+              </div>
             </div>
 
             {/* Nav Items */}
@@ -451,7 +464,12 @@ export default function Dashboard() {
 
           {/* Trigger SOS Button (Bottom) */}
           <button 
-            onClick={() => setSosActive(true)}
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              startSos();
+            }}
             className={`w-full py-3 text-white font-bebas text-lg tracking-wider rounded-pill transition-all active:scale-95 flex items-center justify-center gap-2 mt-4 md:mt-0 ${
               onlineStatus 
                 ? 'bg-primary hover:bg-primary/95 text-black shadow-[0_0_10px_rgba(232,160,32,0.2)]' 
@@ -638,7 +656,7 @@ export default function Dashboard() {
                       return (
                         <div 
                           key={place.id}
-                          onClick={() => navigate(`/dashboard/place/${place.id}`)}
+                          onClick={() => navigate(`/dashboard/place/${place.id}${currentQuery}`)}
                           className="glass-panel p-3.5 rounded-[8px] border border-white/5 hover:border-primary/20 hover:shadow-[0_0_8px_rgba(232,160,32,0.1)] transition-all cursor-pointer group"
                         >
                           <div className="flex items-center justify-between gap-3 text-left overflow-hidden">
@@ -809,7 +827,7 @@ export default function Dashboard() {
                   position={[place.latitude, place.longitude]} 
                   icon={getCustomMarkerIcon(place)}
                   eventHandlers={{
-                    click: () => navigate(`/dashboard/place/${place.id}`),
+                    click: () => navigate(`/dashboard/place/${place.id}${currentQuery}`),
                   }}
                 />
               ))}

@@ -12,7 +12,22 @@ import { useSosStore } from './store';
 export default function App() {
   useEffect(() => {
     const teardownConnectivity = registerConnectivityListeners();
+    const {
+      startConnectivityMonitor,
+      stopConnectivityMonitor,
+      startSos,
+    } = useSosStore.getState();
+    startConnectivityMonitor();
     const stopWatchingLocation = watchLocation();
+
+    const handleEmergencyShortcut = (event) => {
+      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 's') {
+        event.preventDefault();
+        startSos();
+      }
+    };
+
+    window.addEventListener('keydown', handleEmergencyShortcut);
 
     getLocation().catch(() => {
       const state = useSosStore.getState();
@@ -23,17 +38,18 @@ export default function App() {
 
     return () => {
       teardownConnectivity();
+      stopConnectivityMonitor();
       stopWatchingLocation();
+      window.removeEventListener('keydown', handleEmergencyShortcut);
     };
   }, []);
 
   return (
     <ErrorBoundary>
+      {/* Global UI Components must stay mounted above routing */}
+      <Toast />
+      <SosModal />
       <BrowserRouter>
-        {/* Global UI Components */}
-        <Toast />
-        <SosModal />
-
         {/* Route Definitions */}
         <Routes>
           <Route path="/" element={<LandingPage />} />

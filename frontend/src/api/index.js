@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useSosStore } from '../store';
 import { loadNearbyCache, saveNearbyCache } from '../utils/offlineCache';
+import { DEMO_COORDS, getDemoNearbyResults, getDemoSosResponse, isDemoMode } from '../utils/demoData';
 
 const DEFAULT_API_URL = 'http://localhost:8000';
 const API_BASE_URL = (import.meta.env.VITE_API_URL || DEFAULT_API_URL).replace(/\/$/, '');
@@ -77,8 +78,22 @@ apiClient.interceptors.response.use(
 );
 
 export async function getNearby(lat, lng, radiusKm = 10, type = 'all') {
+  if (isDemoMode()) {
+    const demoResults = getDemoNearbyResults();
+    return {
+      results: demoResults,
+      count: demoResults.length,
+      center: DEMO_COORDS,
+      radius_km: radiusKm,
+      cached: false,
+      from_cache: false,
+      demo_mode: true,
+    };
+  }
+
   try {
     const response = await apiClient.get('/api/nearby', {
+      timeout: 3000,
       params: {
         lat,
         lng,
@@ -110,11 +125,36 @@ export async function getNearby(lat, lng, radiusKm = 10, type = 'all') {
 
     return response.data;
   } catch (error) {
-    throw buildStructuredError(error);
+    const cached = loadNearbyCache(lat, lng);
+    if (cached) {
+      return {
+        results: cached.results,
+        count: cached.results.length,
+        center: { lat, lng },
+        radius_km: radiusKm,
+        cached: true,
+        from_cache: true,
+        cache_timestamp: cached.timestamp,
+      };
+    }
+
+    return {
+      results: [],
+      count: 0,
+      center: { lat, lng },
+      radius_km: radiusKm,
+      cached: true,
+      from_cache: true,
+      cache_timestamp: null,
+    };
   }
 }
 
 export async function postSOS(lat, lng, phone = null) {
+  if (isDemoMode()) {
+    return getDemoSosResponse(lat, lng);
+  }
+
   try {
     const response = await apiClient.post('/api/sos', {
       latitude: lat,

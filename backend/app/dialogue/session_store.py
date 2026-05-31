@@ -56,3 +56,6 @@ class SessionStore:
 
     def all_sessions(self):
         return list(self._store.values())
+
+    def clear(self):
+        self._store.clear()

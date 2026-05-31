@@ -64,8 +64,8 @@ app.add_middleware(
 )
 
 app.include_router(triage_router)
-app.include_router(nearby_router)
-app.include_router(sos_router)
+app.include_router(nearby_router, prefix="/api")
+app.include_router(sos_router, prefix="/api")
 app.include_router(health_router)
 app.include_router(admin_router)
 

@@ -86,3 +86,24 @@ async def get_nearby_places(
         radius_km=radius_km,
         cached=True,
     )
+
+
+@router.get("/nearby/{place_id}", response_model=PlaceResponse)
+async def get_place_detail(
+    place_id: int,
+    lat: float | None = Query(default=None),
+    lng: float | None = Query(default=None),
+    db: AsyncSession = Depends(get_db),
+) -> PlaceResponse:
+    """Return details of a specific cached place, optionally calculating distance from lat/lng."""
+    statement = select(Place).where(Place.id == place_id)
+    result = await db.execute(statement)
+    place = result.scalar_one_or_none()
+    if place is None:
+        raise HTTPException(status_code=404, detail="Place not found")
+
+    distance_km = None
+    if lat is not None and lng is not None:
+        distance_km = haversine(lat, lng, place.latitude, place.longitude)
+
+    return _place_to_response(place, distance_km=distance_km)

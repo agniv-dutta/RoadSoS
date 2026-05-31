@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import logging
 from dataclasses import dataclass
 from typing import Any
@@ -12,14 +11,14 @@ from ..utils.haversine import bounding_box
 
 logger = logging.getLogger(__name__)
 
-GOOGLE_NEARBY_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
-GOOGLE_REQUEST_TYPES = ("hospital", "police", "fire_station", "gas_station")
-GOOGLE_TO_INTERNAL_TYPE = {
-    "hospital": "hospital",
-    "police": "police",
-    "fire_station": "fire_station",
-    "gas_station": "fuel",
+GEOAPIFY_BASE = "https://api.geoapify.com/v2/places"
+GEOAPIFY_CATEGORY_MAP = {
+    "hospital": "healthcare.hospital",
+    "police": "service.police",
+    "ambulance": "healthcare.emergency",
+    "fuel": "service.fuel",
+    "towing": "service.vehicle.breakdown",
+    "fire_station": "service.fire_brigade",
 }
 OSM_TYPE_MAP = {
     ("amenity", "hospital"): "hospital",
@@ -27,6 +26,7 @@ OSM_TYPE_MAP = {
     ("amenity", "fuel"): "fuel",
     ("emergency", "ambulance_station"): "ambulance",
 }
+OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 
 
 @dataclass(slots=True)
@@ -43,90 +43,50 @@ class ExternalPlace:
     raw: dict[str, Any] | None = None
 
 
-async def fetch_google_places(latitude: float, longitude: float, radius_km: float) -> list[ExternalPlace]:
-    """Fetch nearby places from the Google Places API."""
-
+async def fetch_geoapify_places(lat: float, lng: float, radius_m: int, place_type: str) -> list[ExternalPlace]:
     settings = get_settings()
-    if not settings.google_places_api_key:
-        logger.warning("GOOGLE_PLACES_API_KEY is not configured; skipping Google Places sync")
+    if not settings.geoapify_api_key:
+        logger.warning("GEOAPIFY_API_KEY is not configured; skipping Geoapify sync")
         return []
 
-    radius_meters = int(radius_km * 1000)
-    collected: list[ExternalPlace] = []
+    category = GEOAPIFY_CATEGORY_MAP.get(place_type, "healthcare.hospital")
+    params = {
+        "categories": category,
+        "filter": f"circle:{lng},{lat},{radius_m}",
+        "bias": f"proximity:{lng},{lat}",
+        "limit": 20,
+        "apiKey": settings.geoapify_api_key,
+    }
 
-    async with httpx.AsyncClient(timeout=25.0) as client:
-        for request_type in GOOGLE_REQUEST_TYPES:
-            collected.extend(
-                await _fetch_google_places_for_type(client, settings.google_places_api_key, latitude, longitude, radius_meters, request_type)
-            )
-
-    return collected
-
-
-async def _fetch_google_places_for_type(
-    client: httpx.AsyncClient,
-    api_key: str,
-    latitude: float,
-    longitude: float,
-    radius_meters: int,
-    request_type: str,
-) -> list[ExternalPlace]:
-    results: list[ExternalPlace] = []
-    page_token: str | None = None
-
-    for _ in range(3):
-        params: dict[str, Any] = {
-            "key": api_key,
-            "location": f"{latitude},{longitude}",
-            "radius": radius_meters,
-            "type": request_type,
-        }
-        if page_token:
-            params["pagetoken"] = page_token
-
-        response = await client.get(GOOGLE_NEARBY_URL, params=params)
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        response = await client.get(GEOAPIFY_BASE, params=params)
         response.raise_for_status()
-        payload = response.json()
+        data = response.json()
 
-        if payload.get("status") not in {"OK", "ZERO_RESULTS"}:
-            logger.warning("Google Places returned status %s for type %s", payload.get("status"), request_type)
+    results: list[ExternalPlace] = []
+    for feature in data.get("features", []):
+        properties = feature.get("properties", {})
+        coordinates = feature.get("geometry", {}).get("coordinates", [None, None])
+        longitude = coordinates[0] if len(coordinates) > 0 else None
+        latitude = coordinates[1] if len(coordinates) > 1 else None
+        if latitude is None or longitude is None:
+            continue
 
-        for item in payload.get("results", []):
-            place = _normalize_google_result(item, request_type)
-            if place is not None:
-                results.append(place)
-
-        page_token = payload.get("next_page_token")
-        if not page_token:
-            break
-
-        await asyncio.sleep(2.0)
+        contact = properties.get("contact") or {}
+        results.append(
+            ExternalPlace(
+                name=properties.get("name") or "Unknown",
+                place_type=place_type,
+                latitude=float(latitude),
+                longitude=float(longitude),
+                phone=contact.get("phone") or properties.get("phone"),
+                address=properties.get("formatted"),
+                source="geoapify",
+                raw=feature,
+            )
+        )
 
     return results
-
-
-def _normalize_google_result(item: dict[str, Any], request_type: str) -> ExternalPlace | None:
-    geometry = item.get("geometry", {}).get("location", {})
-    latitude = geometry.get("lat")
-    longitude = geometry.get("lng")
-    name = item.get("name")
-
-    if latitude is None or longitude is None or not name:
-        return None
-
-    internal_type = GOOGLE_TO_INTERNAL_TYPE.get(request_type, request_type)
-    address = item.get("vicinity") or item.get("formatted_address")
-
-    return ExternalPlace(
-        name=name,
-        place_type=internal_type,
-        latitude=float(latitude),
-        longitude=float(longitude),
-        phone=None,
-        address=address,
-        source="google_places",
-        raw=item,
-    )
 
 
 async def fetch_osm_places(latitude: float, longitude: float, radius_km: float) -> list[ExternalPlace]:

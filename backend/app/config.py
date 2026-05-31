@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     app_name: str = "RoadSoS"
     version: str = "1.0.0"
     database_url: str = "sqlite+aiosqlite:///./roadsos.db"
-    google_places_api_key: str | None = None
+    geoapify_api_key: str = ""
     twilio_account_sid: str | None = None
     twilio_auth_token: str | None = None
     twilio_from_number: str | None = None

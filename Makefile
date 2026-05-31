@@ -40,4 +40,4 @@ bench:
 
 seed:
 	@echo "Seeding SQLite with verified Mumbai emergency places"
-	@$(PYTHON) backend/scripts/seed_mumbai_places.py
+	@$(PYTHON) backend/scripts/seed_db.py

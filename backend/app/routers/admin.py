@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 from collections import Counter
 from datetime import datetime, timezone
 from typing import Final
@@ -14,7 +13,7 @@ from ..database import get_db
 from ..models import Place
 from ..schemas import AdminSyncRequest, AdminSyncResponse
 from ..services.geohash import encode
-from ..services.places import ExternalPlace, fetch_google_places, fetch_osm_places
+from ..services.places import ExternalPlace, fetch_geoapify_places, fetch_osm_places
 from ..utils.haversine import bounding_box, haversine
 
 router = APIRouter()
@@ -111,27 +110,29 @@ async def sync_places(
     if x_admin_key != settings.admin_secret_key:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid admin key")
 
-    source_tasks = [
-        fetch_google_places(payload.lat, payload.lng, payload.radius_km),
-        fetch_osm_places(payload.lat, payload.lng, payload.radius_km),
-    ]
-    google_places, osm_places = await asyncio.gather(*source_tasks, return_exceptions=True)
-
     failed = 0
     combined_places: list[ExternalPlace] = []
     source_counts = Counter()
 
-    if isinstance(google_places, Exception):
+    try:
+        for place_type in ["hospital", "police", "ambulance", "fuel", "fire_station"]:
+            geoapify_places = await fetch_geoapify_places(
+                payload.lat,
+                payload.lng,
+                int(payload.radius_km * 1000),
+                place_type,
+            )
+            combined_places.extend(geoapify_places)
+            source_counts["geoapify"] += len(geoapify_places)
+    except Exception:
         failed += 1
-    else:
-        combined_places.extend(google_places)
-        source_counts["google_places"] = len(google_places)
 
-    if isinstance(osm_places, Exception):
-        failed += 1
-    else:
+    try:
+        osm_places = await fetch_osm_places(payload.lat, payload.lng, payload.radius_km)
         combined_places.extend(osm_places)
         source_counts["osm"] = len(osm_places)
+    except Exception:
+        failed += 1
 
     existing_places = await _load_existing_places(db, payload.lat, payload.lng, payload.radius_km)
     inserted, updated = await _upsert_places(db, existing_places, combined_places)

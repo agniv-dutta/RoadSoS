@@ -17,7 +17,7 @@ def compute_data_confidence(*, is_verified: bool, source: str, last_synced: date
         return 1.0
 
     source_key = (source or "").strip().lower()
-    if source_key in {"google_places", "google"}:
+    if source_key in {"google_places", "google", "geoapify"}:
         if last_synced is None:
             return 0.4
         synced_age = datetime.now(timezone.utc) - last_synced

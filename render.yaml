@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: roadsos-backend
+    runtime: python
+    region: singapore
+    plan: free
+    buildCommand: |
+      pip install -r backend/requirements.txt
+      cd backend && python scripts/seed_db.py
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite+aiosqlite:///./roadsos_prod.db
+      - key: GEOAPIFY_API_KEY
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+      - key: ADMIN_SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://roadsos.vercel.app,http://localhost:5173
+    healthCheckPath: /api/health
+    autoDeploy: true

@@ -18,18 +18,34 @@ branch_labels = None
 depends_on = None
 
 
+def _table_exists(bind, table_name: str) -> bool:
+    return sa.inspect(bind).has_table(table_name)
+
+
+def _index_exists(bind, table_name: str, index_name: str) -> bool:
+    return any(index["name"] == index_name for index in sa.inspect(bind).get_indexes(table_name))
+
+
 def upgrade() -> None:
-    op.create_table(
-        'feedback_reports',
-        sa.Column('id', sa.Integer(), primary_key=True, autoincrement=True, nullable=False),
-        sa.Column('place_id', sa.Integer(), nullable=True),
-        sa.Column('issue', sa.String(length=512), nullable=False),
-        sa.Column('correct_value', sa.String(length=512), nullable=True),
-        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
-        sa.ForeignKeyConstraint(['place_id'], ['places.id']),
-    )
-    op.create_index('ix_feedback_reports_place_id', 'feedback_reports', ['place_id'])
-    op.create_index('ix_feedback_reports_created_at', 'feedback_reports', ['created_at'])
+    bind = op.get_bind()
+
+    if not _table_exists(bind, 'feedback_reports'):
+        op.create_table(
+            'feedback_reports',
+            sa.Column('id', sa.Integer(), primary_key=True, autoincrement=True, nullable=False),
+            sa.Column('place_id', sa.Integer(), nullable=True),
+            sa.Column('issue', sa.String(length=512), nullable=False),
+            sa.Column('correct_value', sa.String(length=512), nullable=True),
+            sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
+            sa.ForeignKeyConstraint(['place_id'], ['places.id']),
+        )
+
+    for index_name, columns in (
+        ('ix_feedback_reports_place_id', ['place_id']),
+        ('ix_feedback_reports_created_at', ['created_at']),
+    ):
+        if not _index_exists(bind, 'feedback_reports', index_name):
+            op.create_index(index_name, 'feedback_reports', columns)
 
 
 def downgrade() -> None:

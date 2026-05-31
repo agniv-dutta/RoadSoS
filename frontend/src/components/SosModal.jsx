@@ -5,6 +5,24 @@ import { X, Send, Share2, ShieldAlert } from 'lucide-react';
 import { getLocation } from '../utils/geo';
 import { saveSosLog } from '../utils/offlineCache';
 
+// Issue 10 — subtle audio ping via Web Audio API (no file needed)
+function playPing() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.3);
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.4);
+  } catch { /* AudioContext unavailable — silently ignore */ }
+}
+
 export default function SosModal() {
   const {
     sosActive,
@@ -21,6 +39,7 @@ export default function SosModal() {
   const [googleMapsUrl, setGoogleMapsUrl] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [buttonFlash, setButtonFlash] = useState(false);
   const timerRef = useRef(null);
 
   // Geolocation lookup when modal opens
@@ -82,7 +101,9 @@ export default function SosModal() {
         setCountdown((prev) => prev - 1);
       }, 1000);
     } else {
-      // Auto-trigger SOS when reaching 0
+      // Issue 10 — flash SOS button white then auto-fire
+      setButtonFlash(true);
+      setTimeout(() => setButtonFlash(false), 400);
       triggerSos();
     }
 
@@ -92,12 +113,14 @@ export default function SosModal() {
   const triggerSos = async () => {
     if (isSending || isSent) return;
     setIsSending(true);
+    // Issue 10 — audio ping on SOS fire
+    playPing();
     try {
       const data = await api.sendSos(coords.lat, coords.lng, null);
       completeSos({ smsSent: data.sms_sent, sosSessionId: data.sos_id ? String(data.sos_id) : null });
       setIsSent(true);
       setToast('SOS Alert Sent Successfully!', 'success');
-      console.log('SOS response:', data);
+      if (import.meta.env.DEV) console.log('SOS response:', data);
     } catch {
       saveSosLog({ latitude: coords.lat, longitude: coords.lng, phone: null });
       completeSos({ smsSent: false, sosSessionId: null });
@@ -214,7 +237,7 @@ export default function SosModal() {
             <button
               onClick={triggerSos}
               disabled={isSending || isSent}
-              className={`w-full py-3 bg-danger hover:bg-danger/90 text-white font-bebas text-lg tracking-wider rounded-pill transition-colors flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(230,57,70,0.2)]`}
+              className={`w-full py-3 font-bebas text-lg tracking-wider rounded-pill transition-colors flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(230,57,70,0.2)] ${buttonFlash ? 'bg-white text-danger' : 'bg-danger hover:bg-danger/90 text-white'}`}
             >
               <Send className="w-4 h-4" />
               {isSending ? "SENDING..." : isSent ? "SOS SENT ✔" : "▶ SEND SOS SMS"}

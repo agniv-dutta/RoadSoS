@@ -1,7 +1,7 @@
 from functools import lru_cache
 
 from dotenv import load_dotenv
-from pydantic import Field, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -29,20 +29,14 @@ class Settings(BaseSettings):
     twilio_auth_token: str | None = None
     twilio_from_number: str | None = None
     admin_secret_key: str = "roadsos_admin_2026"
-    cors_origins: list[str] = Field(
-        default_factory=lambda: ["http://localhost:5173", "http://localhost:3000"]
+    cors_origins_raw: str = Field(
+        default="http://localhost:5173,http://localhost:3000",
+        validation_alias="CORS_ORIGINS",
     )
 
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def parse_cors_origins(cls, value: object) -> list[str]:
-        if value is None:
-            return ["http://localhost:5173", "http://localhost:3000"]
-        if isinstance(value, str):
-            return [origin.strip() for origin in value.split(",") if origin.strip()]
-        if isinstance(value, list):
-            return [str(origin).strip() for origin in value if str(origin).strip()]
-        return [str(value).strip()]
+    @property
+    def cors_origins(self) -> list[str]:
+        return [origin for origin in self.cors_origins_raw.split(",") if origin]
 
 
 @lru_cache(maxsize=1)

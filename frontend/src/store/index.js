@@ -199,9 +199,42 @@ function createUiSlice(set, get) {
     activeScreen: 'dashboard',
     toasts: [],
     toast: null,
+    connectivityMonitor: null,
     setOnlineStatus: (onlineStatus) => set({ onlineStatus }),
     setOfflineMode: (offlineMode) => set({ offlineMode }),
     setActiveScreen: (activeScreen) => set({ activeScreen }),
+    syncConnectivityStatus: async () => {
+      const { checkHealth } = await import('../api/index.js');
+      try {
+        await checkHealth();
+        set({ onlineStatus: true, offlineMode: false });
+        return true;
+      } catch {
+        set({ onlineStatus: false, offlineMode: true });
+        return false;
+      }
+    },
+    startConnectivityMonitor: () => {
+      const state = get();
+      if (state.connectivityMonitor) {
+        return;
+      }
+
+      const runCheck = async () => {
+        await get().syncConnectivityStatus();
+      };
+
+      runCheck();
+      const intervalId = setInterval(runCheck, 30000);
+      set({ connectivityMonitor: intervalId });
+    },
+    stopConnectivityMonitor: () => {
+      const { connectivityMonitor } = get();
+      if (connectivityMonitor) {
+        clearInterval(connectivityMonitor);
+      }
+      set({ connectivityMonitor: null });
+    },
     addToast: (toastInput) => {
       const toast = typeof toastInput === 'string'
         ? { id: `${Date.now()}`, message: toastInput, type: 'info' }

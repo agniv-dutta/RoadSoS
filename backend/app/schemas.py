@@ -84,6 +84,10 @@ class HealthResponse(BaseModel):
     status: str
     db: str
     version: str
+    # Extended stats for Telemetry panel
+    places_count: int | None = None
+    sos_today: int | None = None
+    nlu_model: str | None = None
 
 
 class FeedbackRequest(BaseModel):

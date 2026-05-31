@@ -7,6 +7,7 @@ import SosModal from './components/SosModal';
 import Toast from './components/Toast';
 import { registerConnectivityListeners } from './utils/offlineCache';
 import { getLocation, watchLocation } from './utils/geo';
+import { startKeepAlivePing } from './utils/keepAlive';
 import { useSosStore } from './store';
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
     } = useSosStore.getState();
     startConnectivityMonitor();
     const stopWatchingLocation = watchLocation();
+    const stopKeepAlive = startKeepAlivePing();
 
     const handleEmergencyShortcut = (event) => {
       if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 's') {
@@ -40,6 +42,7 @@ export default function App() {
       teardownConnectivity();
       stopConnectivityMonitor();
       stopWatchingLocation();
+      stopKeepAlive();
       window.removeEventListener('keydown', handleEmergencyShortcut);
     };
   }, []);

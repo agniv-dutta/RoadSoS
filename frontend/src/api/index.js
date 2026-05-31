@@ -3,12 +3,16 @@ import { useSosStore } from '../store';
 import { loadNearbyCache, saveNearbyCache } from '../utils/offlineCache';
 import { DEMO_COORDS, getDemoNearbyResults, getDemoSosResponse, isDemoMode } from '../utils/demoData';
 
-const DEFAULT_API_URL = 'http://localhost:8000';
-const API_BASE_URL = (import.meta.env.VITE_API_URL || DEFAULT_API_URL).replace(/\/$/, '');
+const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/$/, '');
 
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: BASE_URL,
   timeout: 12000,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+  withCredentials: false,
 });
 
 function buildStructuredError(error) {
@@ -124,7 +128,7 @@ export async function getNearby(lat, lng, radiusKm = 10, type = 'all') {
     }
 
     return response.data;
-  } catch (error) {
+  } catch {
     const cached = loadNearbyCache(lat, lng);
     if (cached) {
       return {

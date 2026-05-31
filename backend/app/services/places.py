@@ -45,8 +45,8 @@ class ExternalPlace:
 
 async def fetch_geoapify_places(lat: float, lng: float, radius_m: int, place_type: str) -> list[ExternalPlace]:
     settings = get_settings()
-    if not settings.geoapify_api_key:
-        logger.warning("GEOAPIFY_API_KEY is not configured; skipping Geoapify sync")
+    if not settings.geoapify_places_api_key:
+        logger.warning("GEOAPIFY_PLACES_API_KEY is not configured; skipping Geoapify sync")
         return []
 
     category = GEOAPIFY_CATEGORY_MAP.get(place_type, "healthcare.hospital")
@@ -55,7 +55,7 @@ async def fetch_geoapify_places(lat: float, lng: float, radius_m: int, place_typ
         "filter": f"circle:{lng},{lat},{radius_m}",
         "bias": f"proximity:{lng},{lat}",
         "limit": 20,
-        "apiKey": settings.geoapify_api_key,
+        "apiKey": settings.geoapify_places_api_key,
     }
 
     async with httpx.AsyncClient(timeout=10.0) as client:

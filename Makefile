@@ -8,8 +8,8 @@ COMPOSE ?= docker compose
 .PHONY: dev build up down test adversarial bench seed
 
 dev:
-	@echo "Starting backend and frontend"
-	@cd backend && $(PYTHON) run.py > ../.backend_dev.log 2>&1 & \
+	@echo "Starting backend (uvicorn --reload) and frontend (vite)"
+	@cd backend && $(PYTHON) -m uvicorn app.main:app --reload --host $(UVICORN_HOST) --port $(UVICORN_PORT) > ../.backend_dev.log 2>&1 & \
 	BACK_PID=$$!; \
 	cd ../frontend && npm run dev -- --host 0.0.0.0 --port $(FRONTEND_PORT); \
 	kill $$BACK_PID >/dev/null 2>&1 || true
@@ -40,4 +40,4 @@ bench:
 
 seed:
 	@echo "Seeding SQLite with verified Mumbai emergency places"
-	@$(PYTHON) backend/scripts/seed_db.py
+	@$(PYTHON) backend/scripts/seed_mumbai_places.py

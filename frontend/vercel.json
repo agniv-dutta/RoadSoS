@@ -4,7 +4,7 @@
   "framework": "vite",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "env": {
-    "VITE_API_URL": "https://roadsos-backend.onrender.com"
+    "VITE_API_URL": "https://roadsos-96sx.onrender.com"
   },
   "headers": [
     {

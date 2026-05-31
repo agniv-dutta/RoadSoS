@@ -21,6 +21,6 @@ services:
       - key: ADMIN_SECRET_KEY
         generateValue: true
       - key: CORS_ORIGINS
-        value: https://roadsos.vercel.app,http://localhost:5173
+        value: https://road-sos-six.vercel.app,http://localhost:5173,http://localhost:3000
     healthCheckPath: /api/health
     autoDeploy: true

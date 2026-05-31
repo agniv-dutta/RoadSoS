@@ -136,3 +136,114 @@ Use `backend/.env.example` as the template for local environment variables.
 - `/api/nearby` uses a fast bounding-box SQL prefilter followed by precise haversine distance sorting.
 - `/api/sos` logs the event, finds the nearest hospital, and builds Google Maps and WhatsApp links.
 - `/api/admin/sync` imports places from Google Places and OSM Overpass, then upserts them into the cache.
+
+## Recent development (May 2026)
+
+Since the initial scaffold this repository has received a set of practical integrations and demo-ready improvements intended for hackathon demos and local development. Key additions include:
+
+- Frontend wiring: a centralized API client, a unified `Zustand` store, and an offline cache with a pending-SOS queue so the UI remains responsive when network connectivity is intermittent.
+- Demo mode: open the frontend with `?demo=true` to enable fake GPS, canned nearby results, and immediate SOS demo behavior. There is a backend helper endpoint `GET /api/demo/reset` that clears demo SOS logs and reseeds demo places.
+- Seeding: a deterministic seed script populates 20 verified demo places for fast local demos. Run `python backend/scripts/seed_mumbai_places.py` or the `make seed` shortcut in the project Makefile.
+- Trust signals: places now include a `data_confidence` score and a `verified` flag exposed by the API; the frontend renders a confidence bar, verified badge, and last-updated staleness coloring to help triage decisions.
+- Feedback: users can submit a quick "report incorrect info" form from the place detail page — the backend persists these in a `feedback_reports` table and exposes a POST `/api/feedback` endpoint. An Alembic migration was added for the new table.
+- NLU warm-up: the backend pre-warms the NLU inference engine at startup and logs a p50 warm-up latency measurement (example log: "NLU engine ready (p50: 42ms)").
+- CAP preview: when triage outputs a high-severity (P1) CAP alert, the frontend shows a CAP v1.2 preview in the triage flow so operators can inspect the generated alert before publishing.
+
+## Frontend (quick notes)
+
+- Location: `frontend/` — built with Vite, React, Tailwind CSS, and Zustand.
+- Run locally (dev):
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+- Build for production:
+
+```bash
+cd frontend
+npm run build
+```
+
+- The frontend includes:
+  - A centralized Axios client at `frontend/src/api/index.js` that talks to the backend API and implements a silent cached fallback for `/api/nearby` when upstream calls exceed a short timeout.
+  - An offline cache at `frontend/src/utils/offlineCache.js` which queues SOS submissions while offline and syncs them on reconnect.
+  - A demo helper (`?demo=true`) that preserves the query param across navigation and enables deterministic demo flows.
+
+## Integrations (Geoapify / Google Places / Twilio)
+
+This project supports multiple provider integrations. Set these in `backend/.env` (or in your environment) as needed:
+
+- `GOOGLE_PLACES_API_KEY` — optional; used by the admin sync tooling to import place data from Google Places.
+- `GEOAPIFY_API_KEY` — optional; an alternative mapping/provider that can be used for geocoding or places import depending on admin sync configuration.
+- `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER` — optional; enable outbound SMS for SOS notifications (the backend builds phone and WhatsApp links and can send SMS when configured).
+
+Notes:
+- Admin import/sync supports Google Places and OSM Overpass; Geoapify can be used as an alternative provider by adjusting the admin sync configuration.
+- If you enable Twilio, confirm provider credentials in `backend/.env` and be mindful of usage costs for live SMS during testing.
+
+## Offline / Resilience
+
+- The frontend implements a short (3s) timeout for the live `/api/nearby` call; on slow networks the client falls back silently to a cached nearby result (if available) to avoid blocking the UI.
+- SOS submissions performed while offline are queued locally and automatically retried when connectivity is restored. This behavior is handled by `frontend/src/utils/offlineCache.js`.
+
+## Seeding & Demo reset
+
+- To seed demo places (deterministic Mumbai demo dataset):
+
+```bash
+python backend/scripts/seed_mumbai_places.py
+# or
+make seed
+```
+
+- To reset demo state (clear demo SOS logs, reset sessions, reseed demo places):
+
+```bash
+# GET /api/demo/reset
+# Example (from repo root):
+curl -X GET "http://localhost:8000/api/demo/reset"
+```
+
+## Feedback reports & migrations
+
+- The feedback flow persists reports to the `feedback_reports` table. An Alembic migration was added: run `alembic upgrade head` before relying on the feedback endpoint in an existing database.
+
+```bash
+cd backend
+alembic upgrade head
+```
+
+## Run locally (backend + frontend)
+
+1. Backend:
+
+```powershell
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+copy .env.example .env
+alembic upgrade head
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+2. Frontend (in a separate shell):
+
+```bash
+cd frontend
+npm install
+npm run dev
+# Open the app in your browser, add ?demo=true for demo mode
+```
+
+## Docker / Compose
+
+- A development Dockerfile exists for the backend at `backend/Dockerfile` and the frontend has a `frontend/Dockerfile` and an Nginx config for static serving. Use the provided `docker-compose.yml` for local multi-container demos.
+
+## Where to look next / Admin ideas
+
+- The repository now stores `feedback_reports` and basic demo tooling; a small admin UI to review reported feedback and triage CAP alerts would be a natural next step. If you want, I can scaffold an admin review page or an exports endpoint to pull feedback into a Google Sheet.
+

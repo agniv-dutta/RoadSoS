@@ -150,7 +150,7 @@ export default function Dashboard() {
   const { 
     userLocation, setUserLocation,
     onlineStatus, setOnlineStatus,
-    startSos,
+    setSosActive, startSos,
     nearbyPlaces, setNearbyPlaces,
     selectedPlace, setSelectedPlace,
     setToast,
@@ -236,7 +236,7 @@ export default function Dashboard() {
     setIsHoldingSos(true);
     holdTimerRef.current = setTimeout(() => {
       setIsHoldingSos(false);
-      startSos();
+      setSosActive(true);
     }, 1500); // 1.5 second hold to activate
   };
 
@@ -464,12 +464,7 @@ export default function Dashboard() {
 
           {/* Trigger SOS Button (Bottom) */}
           <button 
-            type="button"
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              startSos();
-            }}
+            onClick={() => setSosActive(true)}
             className={`w-full py-3 text-white font-bebas text-lg tracking-wider rounded-pill transition-all active:scale-95 flex items-center justify-center gap-2 mt-4 md:mt-0 ${
               onlineStatus 
                 ? 'bg-primary hover:bg-primary/95 text-black shadow-[0_0_10px_rgba(232,160,32,0.2)]' 

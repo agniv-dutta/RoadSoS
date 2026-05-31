@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { checkBackendHealth } from '../utils/connectivity';
 
 const MAX_TOASTS = 4;
 const BASE32 = '0123456789bcdefghjkmnpqrstuvwxyz';
@@ -35,9 +34,6 @@ const DEFAULT_OFFLINE_INCIDENTS = [
     timestamp: '14:02 PM',
   },
 ];
-
-let connectivityMonitorId = null;
-let connectivityCheckInFlight = false;
 
 function geohash5(lat, lng) {
   let geohash = '';
@@ -206,47 +202,6 @@ function createUiSlice(set, get) {
     setOnlineStatus: (onlineStatus) => set({ onlineStatus }),
     setOfflineMode: (offlineMode) => set({ offlineMode }),
     setActiveScreen: (activeScreen) => set({ activeScreen }),
-    syncConnectivityStatus: async () => {
-      if (connectivityCheckInFlight) {
-        return get().onlineStatus;
-      }
-
-      connectivityCheckInFlight = true;
-      try {
-        const onlineStatus = await checkBackendHealth();
-        set({ onlineStatus, offlineMode: !onlineStatus });
-        if (onlineStatus) {
-          console.info('✓ Backend health check passed — RoadSoS API online');
-        } else {
-          console.warn('⚠ Backend health check failed — RoadSoS API offline');
-        }
-        return onlineStatus;
-      } finally {
-        connectivityCheckInFlight = false;
-      }
-    },
-    startConnectivityMonitor: () => {
-      if (connectivityMonitorId !== null || typeof window === 'undefined') {
-        return;
-      }
-
-      const pollConnectivity = async () => {
-        await get().syncConnectivityStatus();
-      };
-
-      void pollConnectivity();
-      connectivityMonitorId = window.setInterval(() => {
-        void pollConnectivity();
-      }, 15000);
-    },
-    stopConnectivityMonitor: () => {
-      if (connectivityMonitorId === null || typeof window === 'undefined') {
-        return;
-      }
-
-      window.clearInterval(connectivityMonitorId);
-      connectivityMonitorId = null;
-    },
     addToast: (toastInput) => {
       const toast = typeof toastInput === 'string'
         ? { id: `${Date.now()}`, message: toastInput, type: 'info' }

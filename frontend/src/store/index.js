@@ -194,7 +194,7 @@ function createNearbySlice(set, get) {
 
 function createUiSlice(set, get) {
   return {
-  onlineStatus: typeof navigator !== 'undefined' ? (navigator.onLine ? 'online' : 'offline') : 'online',
+    onlineStatus: typeof navigator !== 'undefined' ? (navigator.onLine ? 'online' : 'offline') : 'online',
     offlineMode: false,
     activeScreen: 'dashboard',
     toasts: [],
@@ -221,46 +221,19 @@ function createUiSlice(set, get) {
       }
 
       const runCheck = async () => {
-        source: 'demo',
         await get().syncConnectivityStatus();
       };
 
-        setLocation: (lat, lng, accuracy = null, source = 'gps') =>
-          set({
-            lat,
-            lng,
-            accuracy,
-            locationError: null,
-            userLocation: { lat, lng },
-            source,
-          }),
-      }
-      set({ connectivityMonitor: null });
+      runCheck();
+      const monitorId = setInterval(runCheck, 30000);
+      set({ connectivityMonitor: monitorId });
     },
-        setUserLocation: (lat, lng, source = 'gps') =>
-          set({
-            lat,
-            lng,
-            userLocation: { lat, lng },
-            source,
-          }),
-            type: toastInput.type || 'info',
-          };
-
-    // Called once on app mount to initialize backend connectivity checks.
-    export async function initConnectivity(set) {
-      set({ onlineStatus: 'checking' });
-
-      const { checkBackendHealth } = await import('../utils/connectivity.js');
-      const isOnline = await checkBackendHealth(3); // 3 attempts, 25s first timeout
-      set({ onlineStatus: isOnline ? 'online' : 'offline' });
-
-      // After initial check, re-check every 30s (not 15s — less aggressive)
-      setInterval(async () => {
-        const status = await checkBackendHealth(1); // 1 attempt for periodic
-        set({ onlineStatus: status ? 'online' : 'offline' });
-      }, 30000);
-    }
+    addToast: (toastInput) => {
+      const toast = {
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        message: toastInput.message,
+        type: toastInput.type || 'info',
+      };
       const nextToasts = [toast, ...get().toasts].slice(0, MAX_TOASTS);
       set({
         toasts: nextToasts,
@@ -289,6 +262,21 @@ function createUiSlice(set, get) {
       get().removeToast(current.id);
     },
   };
+}
+
+// Called once on app mount to initialize backend connectivity checks.
+export async function initConnectivity(set) {
+  set({ onlineStatus: 'checking' });
+
+  const { checkBackendHealth } = await import('../utils/connectivity.js');
+  const isOnline = await checkBackendHealth(3); // 3 attempts, 25s first timeout
+  set({ onlineStatus: isOnline ? 'online' : 'offline' });
+
+  // After initial check, re-check every 30s (not 15s - less aggressive)
+  setInterval(async () => {
+    const status = await checkBackendHealth(1); // 1 attempt for periodic
+    set({ onlineStatus: status ? 'online' : 'offline' });
+  }, 30000);
 }
 
 function createTriageSlice(set) {

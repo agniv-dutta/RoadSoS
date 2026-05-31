@@ -1,13 +1,12 @@
 services:
   - type: web
     name: roadsos-backend
-    runtime: python
+    runtime: docker
     region: singapore
     plan: free
-    buildCommand: |
-      pip install -r backend/requirements.txt
-      cd backend && python scripts/seed_db.py
-    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    rootDir: backend
+    dockerContext: backend
+    dockerfilePath: backend/Dockerfile
     envVars:
       - key: DATABASE_URL
         value: sqlite+aiosqlite:///./roadsos_prod.db

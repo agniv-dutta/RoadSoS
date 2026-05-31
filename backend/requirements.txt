@@ -20,9 +20,6 @@ torchcrf==1.1.0
 # datasets==2.19.1
 # sklearn-crfsuite==0.3.6
 
-# Regex + text utilities
-spacy==3.7.4
-
 # Database (existing scaffold)
 sqlalchemy==2.0.30
 alembic==1.13.1

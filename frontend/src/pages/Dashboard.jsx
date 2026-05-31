@@ -130,6 +130,7 @@ export default function Dashboard() {
     lat, lng,
     userLocation, setUserLocation,
     onlineStatus, setOnlineStatus,
+    source,
     setSosActive, startSos,
     places, nearbyPlaces, setNearbyPlaces,
     selectedPlace, setSelectedPlace,
@@ -185,7 +186,8 @@ export default function Dashboard() {
 
   // Fetch places
   const fetchPlaces = useCallback(async () => {
-    if (!onlineStatus) { loadOfflineCache(); return; }
+    // Only fetch when confirmed online; avoid using cached flow while still checking
+    if (onlineStatus === 'offline') { loadOfflineCache(); return; }
     setNearbyLoading(true);
     setFetchError(false);
     try {
@@ -222,7 +224,7 @@ export default function Dashboard() {
 
   // Issue 4 — fetch telemetry when tab active
   useEffect(() => {
-    if (activeTab !== 'telemetry' || !onlineStatus) return;
+    if (activeTab !== 'telemetry' || onlineStatus !== 'online') return;
     setTelemetryLoading(true);
     checkHealth()
       .then(data => setTelemetryData(data))
@@ -260,7 +262,7 @@ export default function Dashboard() {
 
   const handleCommandSubmit = async () => {
     const text = searchQuery.trim();
-    if (!text || !onlineStatus) return;
+    if (!text || onlineStatus !== 'online') return;
 
     if (isEmergencyMessage(text) || awaitingSlot) {
       setSearchMode('triage');
@@ -379,7 +381,7 @@ export default function Dashboard() {
       <div className="p-4 border-b border-white/10 bg-neutral-950 flex flex-col gap-3">
         <div className="relative">
           <Search className="w-4 h-4 text-textTertiary absolute left-3 top-3" />
-          <input
+            <input
             type="text"
             value={searchQuery}
             onChange={(e) => {
@@ -394,8 +396,8 @@ export default function Dashboard() {
             }}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleCommandSubmit(); } }}
             placeholder={searchPlaceholder}
-            disabled={!onlineStatus}
-            className={`w-full h-10 pl-9 pr-4 bg-white/3 border border-white/10 rounded-[8px] text-xs font-mono placeholder:text-textTertiary text-white focus:outline-none focus:border-primary focus:shadow-[0_0_8px_rgba(232,160,32,0.25)] transition-all ${!onlineStatus ? 'opacity-60 cursor-not-allowed' : ''}`}
+            disabled={onlineStatus !== 'online'}
+            className={`w-full h-10 pl-9 pr-4 bg-white/3 border border-white/10 rounded-[8px] text-xs font-mono placeholder:text-textTertiary text-white focus:outline-none focus:border-primary focus:shadow-[0_0_8px_rgba(232,160,32,0.25)] transition-all ${onlineStatus !== 'online' ? 'opacity-60 cursor-not-allowed' : ''}`}
           />
         </div>
         {triageLoading && <div className="text-[10px] font-mono text-primary tracking-wider animate-pulse">ANALYZING EMERGENCY MESSAGE...</div>}
@@ -421,7 +423,7 @@ export default function Dashboard() {
       </div>
 
       {/* Issue 3 — extended filter tabs */}
-      {onlineStatus && (
+      {onlineStatus === 'online' && (
         <div className="px-4 pb-3 flex gap-1.5 border-b border-white/10 overflow-x-auto">
           {FILTER_TABS.map((filter) => (
             <button
@@ -441,7 +443,7 @@ export default function Dashboard() {
 
       {/* List Content */}
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
-        {onlineStatus ? renderOnlineList() : renderOfflineList()}
+        {onlineStatus === 'online' ? renderOnlineList() : renderOfflineList()}
       </div>
     </div>
   );
@@ -813,10 +815,10 @@ export default function Dashboard() {
             <div className="text-left font-mono">
               <div className="text-[9px] text-textSecondary uppercase tracking-widest leading-none">COMMAND CENTER</div>
               {/* Issue 2 — real activeOps */}
-              <div className="text-sm text-primary font-bold mt-1">Active Ops: {onlineStatus ? activeOps : '— (OFFLINE)'}</div>
+              <div className="text-sm text-primary font-bold mt-1">Active Ops: {onlineStatus === 'online' ? activeOps : '— (OFFLINE)'}</div>
               <div className="mt-1 flex items-center gap-2">
                 {demoMode && <span className="px-2 py-0.5 rounded-pill border border-primary/40 text-primary text-[9px] tracking-widest">DEMO MODE</span>}
-                {onlineStatus && fromCache && <span className="px-2 py-0.5 rounded-pill border border-white/20 text-textSecondary text-[9px] tracking-widest">CACHED</span>}
+                {onlineStatus === 'online' && fromCache && <span className="px-2 py-0.5 rounded-pill border border-white/20 text-textSecondary text-[9px] tracking-widest">CACHED</span>}
               </div>
             </div>
             <nav className="flex flex-col gap-1">
@@ -854,7 +856,7 @@ export default function Dashboard() {
         </aside>
 
         {/* ── CONTENT AREA ─────────────────────────────────────────────────── */}
-        <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+          <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
 
           {/* Left panel (dynamic based on tab) */}
           {leftPanel()}
@@ -863,7 +865,7 @@ export default function Dashboard() {
           <div className="flex-1 h-full relative overflow-hidden bg-black min-h-[300px] md:min-h-0">
 
             {/* CACHED watermark overlay */}
-            {!onlineStatus && (
+            {onlineStatus === 'offline' && (
               <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none overflow-hidden bg-black/10">
                 <div className="absolute w-[450px] h-[450px] border border-white/5 rounded-full flex items-center justify-center">
                   <div className="w-[300px] h-[300px] border border-white/5 rounded-full flex items-center justify-center">
@@ -887,7 +889,7 @@ export default function Dashboard() {
                 url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               />
               <Marker position={[storeLat, storeLng]} icon={userIcon} />
-              {onlineStatus && allPlaces.map((place) => (
+              {onlineStatus === 'online' && allPlaces.map((place) => (
                 <Marker
                   key={place.id}
                   position={[place.latitude, place.longitude]}
@@ -895,7 +897,7 @@ export default function Dashboard() {
                   eventHandlers={{ click: () => navigate(`/dashboard/place/${place.id}${currentQuery}`) }}
                 />
               ))}
-              {onlineStatus && nearestHospital && (
+              {onlineStatus === 'online' && nearestHospital && (
                 <Polyline
                   positions={[[storeLat, storeLng], [nearestHospital.latitude, nearestHospital.longitude]]}
                   pathOptions={{ color: '#3A86FF', dashArray: '6, 8', weight: 3 }}
@@ -913,8 +915,8 @@ export default function Dashboard() {
                   <span>{cityName}</span>
                 </div>
                 <div className="glass-panel px-3 py-1.5 rounded-[6px] font-mono text-[10px] text-white flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${onlineStatus ? 'bg-safe animate-pulse' : 'bg-danger'}`} />
-                  <span>{onlineStatus ? 'OPERATIONAL' : 'NO CONNECTION'}</span>
+                  <span className={`w-2 h-2 rounded-full ${onlineStatus === 'online' ? 'bg-safe animate-pulse' : onlineStatus === 'checking' ? 'bg-primary' : 'bg-danger'}`} />
+                  <span>{onlineStatus === 'online' ? 'OPERATIONAL' : onlineStatus === 'checking' ? 'CONNECTING' : 'NO CONNECTION'}</span>
                 </div>
                 <div className="flex gap-1.5">
                   <button
@@ -936,10 +938,26 @@ export default function Dashboard() {
             {/* Issue 1 — GRID SEC coordinates HUD */}
             <div className="absolute top-[80px] right-4 z-20 glass-panel p-3.5 rounded-[8px] text-right pointer-events-none select-none">
               <div className="font-bebas text-lg tracking-wider text-primary leading-none uppercase">{cityName}</div>
-              <div className="font-mono text-[10px] text-textSecondary mt-1 leading-none">
-                GRID SEC: {storeLat.toFixed(4)}° N, {storeLng.toFixed(4)}° E
+              <div className="font-mono text-[10px] text-textSecondary mt-1 leading-none flex items-center justify-end gap-2">
+                <span className={`source-dot ${source}`} title={`Location from: ${source}`} />
+                <span>
+                  GRID SEC: {storeLat.toFixed(4)}° N, {storeLng.toFixed(4)}° E
+                </span>
+                {source === 'demo' && <span className="ml-2 text-[10px] text-textSecondary">(DEMO)</span>}
               </div>
             </div>
+
+            {/* Connectivity banners: checking (blue) and offline (amber) */}
+            {onlineStatus === 'checking' && (
+              <div className="absolute top-24 right-4 z-30 checking-banner bg-primary/90 text-white px-3 py-2 rounded-md">
+                ⟳ CONNECTING TO ROADSOS BACKEND...
+              </div>
+            )}
+            {onlineStatus === 'offline' && (
+              <div className="absolute top-24 right-4 z-30 offline-banner bg-amber-500 text-white px-3 py-2 rounded-md">
+                ⚡ YOU ARE OFFLINE — SHOWING CACHED RESULTS
+              </div>
+            )}
 
             {/* SOS BUTTON — bottom center */}
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-auto">
@@ -977,7 +995,7 @@ export default function Dashboard() {
             </div>
 
             {/* Offline context card — bottom left */}
-            {!onlineStatus && (
+            {onlineStatus === 'offline' && (
               <div className="absolute bottom-6 left-4 z-20 w-[320px] glass-panel p-4 rounded-[8px] border border-danger/30 hover:border-primary/20 transition-all shadow-xl pointer-events-auto flex flex-col gap-2.5">
                 <div className="flex items-center gap-2 text-primary">
                   <Info className="w-4 h-4" />

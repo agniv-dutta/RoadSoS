@@ -194,7 +194,7 @@ function createNearbySlice(set, get) {
 
 function createUiSlice(set, get) {
   return {
-    onlineStatus: typeof navigator !== 'undefined' ? navigator.onLine : true,
+  onlineStatus: typeof navigator !== 'undefined' ? (navigator.onLine ? 'online' : 'offline') : 'online',
     offlineMode: false,
     activeScreen: 'dashboard',
     toasts: [],
@@ -207,10 +207,10 @@ function createUiSlice(set, get) {
       const { checkHealth } = await import('../api/index.js');
       try {
         await checkHealth();
-        set({ onlineStatus: true, offlineMode: false });
+        set({ onlineStatus: 'online', offlineMode: false });
         return true;
       } catch {
-        set({ onlineStatus: false, offlineMode: true });
+        set({ onlineStatus: 'offline', offlineMode: true });
         return false;
       }
     },
@@ -221,28 +221,46 @@ function createUiSlice(set, get) {
       }
 
       const runCheck = async () => {
+        source: 'demo',
         await get().syncConnectivityStatus();
       };
 
-      runCheck();
-      const intervalId = setInterval(runCheck, 30000);
-      set({ connectivityMonitor: intervalId });
-    },
-    stopConnectivityMonitor: () => {
-      const { connectivityMonitor } = get();
-      if (connectivityMonitor) {
-        clearInterval(connectivityMonitor);
+        setLocation: (lat, lng, accuracy = null, source = 'gps') =>
+          set({
+            lat,
+            lng,
+            accuracy,
+            locationError: null,
+            userLocation: { lat, lng },
+            source,
+          }),
       }
       set({ connectivityMonitor: null });
     },
-    addToast: (toastInput) => {
-      const toast = typeof toastInput === 'string'
-        ? { id: `${Date.now()}`, message: toastInput, type: 'info' }
-        : {
-            id: toastInput.id || `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`,
-            message: toastInput.message,
+        setUserLocation: (lat, lng, source = 'gps') =>
+          set({
+            lat,
+            lng,
+            userLocation: { lat, lng },
+            source,
+          }),
             type: toastInput.type || 'info',
           };
+
+    // Called once on app mount to initialize backend connectivity checks.
+    export async function initConnectivity(set) {
+      set({ onlineStatus: 'checking' });
+
+      const { checkBackendHealth } = await import('../utils/connectivity.js');
+      const isOnline = await checkBackendHealth(3); // 3 attempts, 25s first timeout
+      set({ onlineStatus: isOnline ? 'online' : 'offline' });
+
+      // After initial check, re-check every 30s (not 15s — less aggressive)
+      setInterval(async () => {
+        const status = await checkBackendHealth(1); // 1 attempt for periodic
+        set({ onlineStatus: status ? 'online' : 'offline' });
+      }, 30000);
+    }
       const nextToasts = [toast, ...get().toasts].slice(0, MAX_TOASTS);
       set({
         toasts: nextToasts,

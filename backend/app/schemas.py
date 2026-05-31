@@ -80,14 +80,14 @@ class AdminSyncResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     """Health check response payload."""
-
     status: str
     db: str
     version: str
     # Extended stats for Telemetry panel
-    places_count: int | None = None
-    sos_today: int | None = None
-    nlu_model: str | None = None
+    places_in_db: int | None = None
+    model: str | None = None
+    timestamp: str | None = None
+    environment: str | None = None
 
 
 class FeedbackRequest(BaseModel):

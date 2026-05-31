@@ -6,6 +6,7 @@ Registers all routers. Run with: uvicorn app.main:app --reload
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 from app.routers.triage  import router as triage_router
 from app.routers.nearby  import router as nearby_router
@@ -67,10 +68,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=["*"],  # wildcard for Render/Vercel cross-origin
+    allow_credentials=False,  # must be False when allow_origins=["*"]
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["X-Latency-Ms"],
 )
 
 app.include_router(triage_router)
@@ -99,3 +101,15 @@ async def root():
             "health":  "GET  /api/health",
         },
     }
+
+
+
+
+@app.options("/{path:path}")
+async def options_handler(path: str):
+    return {"status": "ok"}
+
+
+@app.get("/api/ping")
+async def ping():
+    return {"pong": True}

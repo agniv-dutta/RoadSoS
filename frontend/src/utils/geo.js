@@ -87,10 +87,19 @@ export function getLocation() {
 
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      const error = new Error('Geolocation is not supported by this browser');
-      store.setLocationError(error.message);
-      store.setIsLocating(false);
-      reject(error);
+      // Geolocation not supported — use IP fallback
+      getLocationFromIP().then((ipLoc) => {
+        store.setIsLocating(false);
+        if (ipLoc) {
+          store.setLocation(ipLoc.lat, ipLoc.lng, ipLoc.accuracy ?? null, 'ip');
+          resolve(ipLoc);
+        } else {
+          // demo fallback
+          store.setLocation(DEMO_COORDS.lat, DEMO_COORDS.lng, 5, 'demo');
+          store.setIsLocating(false);
+          resolve({ lat: DEMO_COORDS.lat, lng: DEMO_COORDS.lng, source: 'demo' });
+        }
+      });
       return;
     }
 
@@ -99,26 +108,53 @@ export function getLocation() {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         const accuracy = position.coords.accuracy ?? null;
-        store.setLocation(lat, lng, accuracy);
+        store.setLocation(lat, lng, accuracy, 'gps');
         store.setIsLocating(false);
-        resolve({ lat, lng });
+        resolve({ lat, lng, accuracy, source: 'gps' });
       },
-      (error) => {
+      async (error) => {
+        console.warn('GPS denied or failed:', error.message);
+        // Fallback 1: try IP geolocation (Geoapify IP Geolocation API)
+        const ipLoc = await getLocationFromIP();
         store.setIsLocating(false);
-        if (error.code === error.PERMISSION_DENIED) {
-          onLocationPermissionDenied();
+        if (ipLoc) {
+          store.setLocation(ipLoc.lat, ipLoc.lng, ipLoc.accuracy ?? null, 'ip');
+          resolve({ ...ipLoc, source: 'ip' });
         } else {
-          store.setLocationError(error.message || 'Unable to access location');
+          // Fallback 2: default to Mumbai for demo
+          console.warn('Using demo location: Mumbai');
+          store.setLocation(DEMO_COORDS.lat, DEMO_COORDS.lng, 5, 'demo');
+          resolve({ lat: DEMO_COORDS.lat, lng: DEMO_COORDS.lng, source: 'demo' });
         }
-        reject(error);
       },
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 0,
+        maximumAge: 300000, // 5 min cache — prevents repeated permission dialogs
       }
     );
   });
+}
+
+async function getLocationFromIP() {
+  try {
+    const key = import.meta.env.VITE_GEOAPIFY_KEY || '';
+    const res = await fetch(
+      `https://api.geoapify.com/v1/ipinfo?apiKey=${key}`,
+      { signal: typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function' ? AbortSignal.timeout(5000) : undefined }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return {
+      lat: data.location?.latitude,
+      lng: data.location?.longitude,
+      city: data.city?.name,
+      accuracy: null,
+      source: 'ip',
+    };
+  } catch {
+    return null;
+  }
 }
 
 export function watchLocation(callback) {

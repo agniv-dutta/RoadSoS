@@ -8,17 +8,14 @@ import Toast from './components/Toast';
 import { registerConnectivityListeners } from './utils/offlineCache';
 import { getLocation, watchLocation } from './utils/geo';
 import { startKeepAlivePing } from './utils/keepAlive';
-import { useSosStore } from './store';
+import { useSosStore, initConnectivity } from './store';
 
 export default function App() {
   useEffect(() => {
     const teardownConnectivity = registerConnectivityListeners();
-    const {
-      startConnectivityMonitor,
-      stopConnectivityMonitor,
-      startSos,
-    } = useSosStore.getState();
-    startConnectivityMonitor();
+    const { startSos } = useSosStore.getState();
+    // Run the initial connectivity check (handles cold-start tolerances)
+    initConnectivity(useSosStore.setState).catch(() => {});
     const stopWatchingLocation = watchLocation();
     const stopKeepAlive = startKeepAlivePing();
 
@@ -40,7 +37,7 @@ export default function App() {
 
     return () => {
       teardownConnectivity();
-      stopConnectivityMonitor();
+      // stopConnectivityMonitor is no longer used; connectivity interval is internal to initConnectivity
       stopWatchingLocation();
       stopKeepAlive();
       window.removeEventListener('keydown', handleEmergencyShortcut);

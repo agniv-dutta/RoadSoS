@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
+import os
 
 from ..config import get_settings
-from ..database import AsyncSessionLocal, ping_db
+from ..database import AsyncSessionLocal, ping_db, get_db
 from ..models import Place, SOSLog
 from ..schemas import HealthResponse
 
@@ -14,41 +16,24 @@ router = APIRouter()
 
 
 @router.get("/health", response_model=HealthResponse)
-async def health_check() -> HealthResponse:
+async def health_check(db: AsyncSession = Depends(get_db)) -> HealthResponse:
     """Return the service and database health status, including telemetry stats."""
 
     try:
-        await ping_db()
-    except Exception as exc:  # pragma: no cover - defensive route guard
-        raise HTTPException(status_code=503, detail="database unavailable") from exc
-
-    settings = get_settings()
-
-    # Collect extended stats for Telemetry panel
-    places_count: int | None = None
-    sos_today: int | None = None
-    try:
-        async with AsyncSessionLocal() as db:
-            result = await db.execute(select(func.count()).select_from(Place))
-            places_count = result.scalar_one()
-
-            today_start = datetime.now(timezone.utc).replace(
-                hour=0, minute=0, second=0, microsecond=0
-            )
-            sos_result = await db.execute(
-                select(func.count())
-                .select_from(SOSLog)
-                .where(SOSLog.created_at >= today_start)
-            )
-            sos_today = sos_result.scalar_one()
-    except Exception:  # pragma: no cover - non-critical stats
-        pass
+        # lightweight check: count places
+        result = await db.execute(select(func.count(Place.id)))
+        place_count = result.scalar()
+        db_status = "connected"
+    except Exception as e:
+        place_count = 0
+        db_status = f"error: {str(e)}"
 
     return HealthResponse(
         status="ok",
-        db="connected",
-        version=settings.version,
-        places_count=places_count,
-        sos_today=sos_today,
-        nlu_model="XLM-RoBERTa (interim) · BART fallback active",
+        db=db_status,
+        version="1.0.0",
+        places_in_db=place_count,
+        model="xlm-roberta-interim",
+        timestamp=datetime.utcnow().isoformat(),
+        environment=os.getenv("RENDER", "local"),
     )

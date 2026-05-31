@@ -52,7 +52,7 @@ apiClient.interceptors.response.use(
   (response) => {
     const state = useSosStore.getState();
     state.setOfflineMode(false);
-    state.setOnlineStatus(true);
+    state.setOnlineStatus('online');
     return response;
   },
   async (error) => {
@@ -60,7 +60,7 @@ apiClient.interceptors.response.use(
     if (networkError) {
       const state = useSosStore.getState();
       state.setOfflineMode(true);
-      state.setOnlineStatus(false);
+      state.setOnlineStatus('offline');
 
       const fallbackFactory = error?.config?.metadata?.cacheFallback;
       if (typeof fallbackFactory === 'function') {

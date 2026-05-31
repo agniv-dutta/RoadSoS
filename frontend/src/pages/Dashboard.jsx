@@ -14,35 +14,21 @@ import {
 import { isDemoMode } from '../utils/demoData';
 
 const DISTRESS_KEYWORDS = [
-  'help',
-  'accident',
-  'emergency',
-  'urgent',
-  'fire',
-  'ambulance',
-  'crash',
-  'bleeding',
-  'injured',
-  'stuck',
-  'sos',
-  'panic',
-  'bachao',
-  'madad',
-  'bachaoo',
+  // EN
+  'accident', 'crash', 'help', 'injured', 'hurt', 'bleeding', 'fire',
+  'trapped', 'emergency', 'ambulance', 'dying', 'dead', 'unconscious',
+  'stuck', 'collision',
+  // HI (romanised)
+  'madad', 'bachao', 'chot', 'khoon', 'aag', 'phas',
+  // BN (romanised)
+  'sahajjo', 'raktopat', 'agun', 'fese',
 ];
 
-function looksLikeEmergencyMessage(text) {
-  const normalized = String(text || '').trim().toLowerCase();
-  if (!normalized) {
-    return false;
-  }
-
-  const words = normalized.split(/\s+/);
-  if (words.length <= 4) {
-    return false;
-  }
-
-  return DISTRESS_KEYWORDS.some((keyword) => normalized.startsWith(keyword));
+function isEmergencyMessage(text) {
+  const lower = String(text || '').toLowerCase();
+  const wordCount = text.trim().split(/\s+/).length;
+  const hasKeyword = DISTRESS_KEYWORDS.some(k => lower.includes(k));
+  return wordCount >= 4 || hasKeyword;
 }
 
 function parseLocationSlot(slots) {
@@ -168,6 +154,8 @@ export default function Dashboard() {
   const [triageResult, setLocalTriageResult] = useState(null);
   const [triageLoading, setTriageLoading] = useState(false);
   const [capExpanded, setCapExpanded] = useState(false);
+  const [searchMode, setSearchMode] = useState('places'); // 'places' | 'triage'
+  const [awaitingSlot, setAwaitingSlot] = useState(false);
   const holdTimerRef = useRef(null);
   const demoMode = isDemoMode();
 
@@ -253,49 +241,80 @@ export default function Dashboard() {
       return;
     }
 
-    const shouldRouteToTriage = looksLikeEmergencyMessage(text) || Boolean(sessionId);
-    if (!shouldRouteToTriage) {
-      return;
-    }
+    // Route to triage if: message is an emergency OR we're mid-session awaiting a slot
+    if (isEmergencyMessage(text) || awaitingSlot) {
+      setSearchMode('triage');
+      setTriageLoading(true);
+      try {
+        const parsed = await api.parseTriageMessage(text, sessionId || null, null);
+        const normalized = {
+          intent: parsed.intent || 'unknown',
+          triage: parsed.triage_result || parsed.triage || parsed.triage_level || 'P3',
+          slots: parsed.filled_slots || parsed.slots || {},
+          cap_alert: parsed.cap_alert || null,
+          session_id: parsed.session_id || null,
+          follow_up_question: parsed.follow_up_question || null,
+          ready_to_dispatch: parsed.ready_to_dispatch || false,
+        };
 
-    setTriageLoading(true);
-    try {
-      const parsed = await api.parseTriageMessage(text, sessionId || null, null);
-      const normalized = {
-        intent: parsed.intent || 'unknown',
-        triage: parsed.triage_result || parsed.triage || parsed.triage_level || 'P3',
-        slots: parsed.filled_slots || parsed.slots || {},
-        cap_alert: parsed.cap_alert || null,
-        session_id: parsed.session_id || null,
-        follow_up_question: parsed.follow_up_question || null,
-      };
+        setLocalTriageResult(normalized);
+        setTriageResult(normalized);
+        addTriageMessage({ role: 'user', text, timestamp: Date.now() });
 
-      setLocalTriageResult(normalized);
-      setTriageResult(normalized);
-      addTriageMessage({ role: 'user', text, timestamp: Date.now() });
-      if (normalized.session_id) {
-        setTriageSessionId(normalized.session_id);
+        if (normalized.session_id) {
+          setTriageSessionId(normalized.session_id);
+        }
+
+        if (normalized.follow_up_question) {
+          setSearchPlaceholder(normalized.follow_up_question);
+          setAwaitingSlot(true);
+        } else {
+          setSearchPlaceholder('CMD: Search Dispatch Grid...');
+          setAwaitingSlot(false);
+        }
+
+        const prefilledLocation = parseLocationSlot(normalized.slots);
+        if (normalized.triage === 'P1') {
+          startSos(normalized.session_id || null, prefilledLocation);
+        }
+
+        // After dispatch: refresh map markers and reset session
+        if (normalized.ready_to_dispatch) {
+          setSearchPlaceholder('Ready for next emergency');
+          setAwaitingSlot(false);
+          try {
+            const data = await api.getNearby(userLocation.lat, userLocation.lng, 10);
+            if (data && data.results) {
+              setNearbyPlaces(data.results);
+            }
+          } catch { /* silent */ }
+          // Clear session after dispatch
+          setTriageSessionId(null);
+        }
+
+        setSearchQuery('');
+      } catch (error) {
+        setToast(error.message || 'Failed to parse triage message', 'error');
+      } finally {
+        setTriageLoading(false);
       }
-      if (normalized.follow_up_question) {
-        setSearchPlaceholder(normalized.follow_up_question);
-      } else {
-        setSearchPlaceholder('CMD: Search Dispatch Grid...');
+    } else {
+      // Short place query (1–3 words, no distress keyword) → place search
+      setSearchMode('places');
+      setLocalTriageResult(null);
+      try {
+        const data = await api.getNearby(userLocation.lat, userLocation.lng, 10, text);
+        if (data && data.results) {
+          setNearbyPlaces(data.results);
+          setFromCache(Boolean(data.from_cache));
+        }
+      } catch (error) {
+        setToast(error.message || 'Place search failed', 'error');
       }
-
-      const prefilledLocation = parseLocationSlot(normalized.slots);
-      if (normalized.triage === 'P1') {
-        startSos(normalized.session_id || null, prefilledLocation);
-      }
-
-      setSearchQuery('');
-    } catch (error) {
-      setToast(error.message || 'Failed to parse triage message', 'error');
-    } finally {
-      setTriageLoading(false);
     }
   };
 
-  // Filters results list based on filter tab and search box
+  // Filters results list based on filter tab and search box (only in places mode)
   const filteredPlaces = nearbyPlaces.filter(place => {
     // Type Filter
     if (activeFilter === 'hospital' && place.place_type !== 'hospital' && place.place_type !== 'trauma_center') {
@@ -305,8 +324,8 @@ export default function Dashboard() {
       return false;
     }
     
-    // Search Query
-    if (searchQuery.trim() !== '') {
+    // Search Query — only apply text filter in places mode
+    if (searchMode === 'places' && searchQuery.trim() !== '') {
       return place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
              (place.address && place.address.toLowerCase().includes(searchQuery.toLowerCase()));
     }
@@ -495,7 +514,17 @@ export default function Dashboard() {
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      // Clear triage session if user empties the input
+                      if (!e.target.value.trim()) {
+                        setSearchMode('places');
+                        setAwaitingSlot(false);
+                        setLocalTriageResult(null);
+                        setSearchPlaceholder('CMD: Search Dispatch Grid...');
+                        setTriageSessionId(null);
+                      }
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
@@ -511,66 +540,100 @@ export default function Dashboard() {
                   />
                 </div>
                 {triageLoading && (
-                  <div className="text-[10px] font-mono text-primary tracking-wider">ANALYZING EMERGENCY MESSAGE...</div>
+                  <div className="text-[10px] font-mono text-primary tracking-wider animate-pulse">ANALYZING EMERGENCY MESSAGE...</div>
                 )}
-                {triageResult && (
-                  <div className="glass-panel rounded-[8px] p-3 border border-primary/20 text-left">
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <span className="font-mono text-[10px] tracking-widest text-primary">INTENT: {String(triageResult.intent).toUpperCase()}</span>
-                      <span className={`px-2 py-0.5 rounded-pill text-[9px] font-mono tracking-widest border ${
+                {searchMode === 'triage' && triageResult && (
+                  <div className="glass-panel rounded-[8px] p-3 border border-primary/20 text-left flex flex-col gap-2">
+                    {/* Intent badge + triage level */}
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-[10px] tracking-widest text-textSecondary uppercase">
+                        {String(triageResult.intent).toUpperCase()}
+                      </span>
+                      <span className={`px-2.5 py-0.5 rounded-pill text-[10px] font-mono font-bold tracking-widest border ${
                         triageResult.triage === 'P1'
-                          ? 'text-danger border-danger/40'
+                          ? 'text-white bg-danger border-danger'
                           : triageResult.triage === 'P2'
-                          ? 'text-primary border-primary/40'
-                          : 'text-safe border-safe/40'
+                          ? 'text-black bg-primary border-primary'
+                          : 'text-black bg-safe border-safe'
                       }`}>
-                        {triageResult.triage}
+                        {triageResult.triage === 'P1' ? 'P1 CRITICAL'
+                          : triageResult.triage === 'P2' ? 'P2 SERIOUS'
+                          : 'P3 MINOR'}
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5 mb-2">
-                      {Object.entries(triageResult.slots || {}).length ? Object.entries(triageResult.slots || {}).map(([key, value]) => (
-                        <span key={key} className="px-2 py-0.5 rounded-pill text-[9px] font-mono border border-white/10 text-textSecondary">
-                          {key}: {String(value)}
-                        </span>
-                      )) : (
-                        <span className="text-[10px] font-mono text-textTertiary">No slots extracted yet.</span>
-                      )}
+                    {/* Slot pills */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {Object.entries(triageResult.slots || {}).length > 0
+                        ? Object.entries(triageResult.slots || {}).map(([key, value]) => {
+                            const k = key.toUpperCase();
+                            const emoji =
+                              k === 'LOCATION' || k === 'LOCATION_MENTION' ? '📍'
+                              : k === 'CASUALTY_COUNT' || k === 'CASUALTIES' ? '👥'
+                              : k === 'HAZARD_TYPE' || k === 'HAZARD' ? '🔥'
+                              : '🏷️';
+                            return (
+                              <span key={key} className="px-2 py-0.5 rounded-pill text-[9px] font-mono border border-white/10 text-textSecondary flex items-center gap-1">
+                                <span>{emoji}</span>
+                                <span>{String(value)}</span>
+                              </span>
+                            );
+                          })
+                        : (
+                          <span className="text-[10px] font-mono text-textTertiary">No slots extracted yet.</span>
+                        )}
                     </div>
 
+                    {/* Follow-up question: amber banner */}
                     {triageResult.follow_up_question && (
-                      <div className="mb-2 text-[10px] font-mono text-info">
-                        FOLLOW-UP: {triageResult.follow_up_question}
+                      <div className="rounded-[6px] bg-primary/10 border border-primary/30 px-2.5 py-2 text-[10px] font-mono text-primary">
+                        ⚠ {triageResult.follow_up_question}
                       </div>
                     )}
 
+                    {/* Ready to dispatch: green banner */}
+                    {triageResult.ready_to_dispatch && (
+                      <div className="rounded-[6px] bg-safe/10 border border-safe/30 px-2.5 py-2 text-[10px] font-mono text-safe flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Dispatching nearest services...
+                      </div>
+                    )}
+
+                    {/* CAP v1.2 collapsible */}
                     {triageResult.cap_alert && (
                       <div className="border border-white/10 rounded-[8px] overflow-hidden">
                         <button
-                          onClick={() => setCapExpanded((value) => !value)}
+                          onClick={() => setCapExpanded((v) => !v)}
                           className="w-full px-2.5 py-2 flex items-center justify-between text-[10px] font-mono tracking-wider text-white/90 bg-white/5"
                         >
-                          <span>CAP v1.2 Standard Alert - International Emergency Protocol</span>
+                          <span>CAP v1.2 Alert</span>
                           <ChevronDown className={`w-3.5 h-3.5 transition-transform ${capExpanded ? 'rotate-180' : ''}`} />
                         </button>
-                        {capExpanded && triageResult.triage === 'P1' && (
-                          <div className="p-2 text-[9px] leading-relaxed max-h-52 overflow-auto text-textSecondary bg-black/40 space-y-1.5">
-                            <div className="text-primary">identifier: {triageResult.cap_alert.identifier}</div>
-                            <div>sender: {triageResult.cap_alert.sender}</div>
-                            <div>sent: {triageResult.cap_alert.sent}</div>
-                            <div>status: {triageResult.cap_alert.status}</div>
-                            <div>msgType: {triageResult.cap_alert.msgType}</div>
-                            <div>scope: {triageResult.cap_alert.scope}</div>
-                            <div className="text-white/80">info.event: {triageResult.cap_alert.info?.[0]?.event}</div>
-                            <div>info.urgency: {triageResult.cap_alert.info?.[0]?.urgency}</div>
-                            <div>info.severity: {triageResult.cap_alert.info?.[0]?.severity}</div>
-                            <div>info.certainty: {triageResult.cap_alert.info?.[0]?.certainty}</div>
-                            <div>description: {triageResult.cap_alert.info?.[0]?.description}</div>
-                            <div className="pt-1 text-textTertiary">slots: {JSON.stringify(triageResult.slots || {})}</div>
+                        {capExpanded && (
+                          <div className="p-2 text-[9px] leading-relaxed max-h-52 overflow-auto text-textSecondary bg-black/40 space-y-1">
+                            {triageResult.cap_alert.info?.[0]?.urgency && (
+                              <div>urgency: <span className="text-white/70">{triageResult.cap_alert.info[0].urgency}</span></div>
+                            )}
+                            {triageResult.cap_alert.info?.[0]?.severity && (
+                              <div>severity: <span className="text-white/70">{triageResult.cap_alert.info[0].severity}</span></div>
+                            )}
+                            {triageResult.cap_alert.info?.[0]?.certainty && (
+                              <div>certainty: <span className="text-white/70">{triageResult.cap_alert.info[0].certainty}</span></div>
+                            )}
+                            {triageResult.triage === 'P1' && (
+                              <>
+                                {triageResult.cap_alert.identifier && (
+                                  <div className="text-primary">identifier: {triageResult.cap_alert.identifier}</div>
+                                )}
+                                {triageResult.cap_alert.info?.[0]?.event && (
+                                  <div>event: {triageResult.cap_alert.info[0].event}</div>
+                                )}
+                                {triageResult.cap_alert.info?.[0]?.description && (
+                                  <div>description: {triageResult.cap_alert.info[0].description}</div>
+                                )}
+                              </>
+                            )}
                           </div>
-                        )}
-                        {capExpanded && triageResult.triage !== 'P1' && (
-                          <pre className="p-2 text-[9px] leading-relaxed max-h-44 overflow-auto text-textSecondary bg-black/40">{JSON.stringify(triageResult.cap_alert, null, 2)}</pre>
                         )}
                       </div>
                     )}
